@@ -19,15 +19,17 @@ public class Civilian : Entity
     //[SerializeField]
     private int rotationNumber;
 
-    //private int RandomDirection;
-
-    //private float DirectionTime;
-    //private float DirectionRate = 5000f; //5 seconds
+    private PlayerUI playerUI;
 
     void Start()
     {
         Speed = walkingSpeed;
         SetDirection();
+
+        if(playerUI == null)
+        {
+            playerUI = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
+        }
     }
 
     
@@ -35,8 +37,6 @@ public class Civilian : Entity
     {
         MoveAround();
     }
-
-    
 
     private void MoveAround()
     {      
@@ -65,34 +65,44 @@ public class Civilian : Entity
             case DirectionState.Idle:
                 Direction.z = 0;
                 Direction.x = 0;
+                rotationNumber = 0;
                 break;
         }
         transform.Rotate(0, rotationNumber, 0);
-        /*
-        RandomDirection = Random.Range(1, 5);
-        switch(RandomDirection)
-        {
-            case 1:
-                Direction.z = 1;
-                break;
-            case 2:
-                Direction.z = -1;
-                break;
-            case 3:
-                Direction.x = 1;
-                break;
-            case 4:
-                Direction.x = -1;
-                break;
-        }*/
+       
     }
 
     IEnumerator ChangeDirection()
     {
         yield return new WaitForSeconds(timerChangeDirection);
 
-        transform.Rotate(0, 180, 0);
 
+        if(directionState != DirectionState.Idle)
+        {
+            transform.Rotate(0, 180, 0);
+        }
+
+        
+
+        StopAllCoroutines();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            
+            StartCoroutine(DetectionIncrease(1));
+        }
+            
+    }
+
+    IEnumerator DetectionIncrease(int waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        playerUI.DetectionAmount++;
+        
         StopAllCoroutines();
     }
 }

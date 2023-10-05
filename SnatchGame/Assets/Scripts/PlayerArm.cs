@@ -54,7 +54,7 @@ public class PlayerArm : Player
     {
         Speed = 2;
         RotateSpeed = 50;
-        PlayerBase = GameObject.Find("Base");
+        PlayerBase = GameObject.Find("BasePlayer");
        
     }
     

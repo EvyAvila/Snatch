@@ -487,7 +487,7 @@ GameObject:
   - component: {fileID: 7574448964807045850}
   m_Layer: 0
   m_Name: Dummy
-  m_TagString: Untagged
+  m_TagString: Civilian
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -622,9 +622,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 0, z: 0}
-  directionState: 0
-  timerChangeDirection: 5
-  walkingSpeed: 1.5
+  directionState: 1
+  timerChangeDirection: 8
+  walkingSpeed: 6
 --- !u!1 &8878826475995367569
 GameObject:
   m_ObjectHideFlags: 0
