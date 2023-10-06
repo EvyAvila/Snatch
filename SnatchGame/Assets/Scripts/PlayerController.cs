@@ -9,7 +9,9 @@ public class PlayerController : Player
 
     private InputAction moveAction;
 
-    //private float rotateSpeed = 10;
+
+    public List<ExpensiveObject> StolenItems;
+    public int StolenItemsTotal;
 
     private void Awake()
     {
@@ -31,6 +33,10 @@ public class PlayerController : Player
     {
         Speed = 4;
         RotateSpeed = 40;
+        StolenItems = new List<ExpensiveObject>();
+        
+        FindTotal();
+        
     }
 
     void FixedUpdate()
@@ -48,5 +54,10 @@ public class PlayerController : Player
         transform.Translate(Direction * Speed * Time.deltaTime);
     }
 
-   
+    private void FindTotal()
+    {
+        GameObject[] obj = GameObject.FindGameObjectsWithTag("Item");
+
+        StolenItemsTotal = obj.Length;
+    }
 }

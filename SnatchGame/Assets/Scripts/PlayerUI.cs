@@ -12,10 +12,14 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI EndingStateText;
 
+    [SerializeField]
+    private TextMeshProUGUI InventoryText;
+
     public int DetectionAmount { get; set; }
     private int DetectionMax;
 
-    
+    private PlayerController player;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +28,13 @@ public class PlayerUI : MonoBehaviour
         DetectionText.text = DetectionString();
 
         EndingStateText.text = "";
+
+        if (player == null)
+        {
+            player = GameObject.Find("BasePlayer").GetComponent<PlayerController>();
+        }
+
+        InventoryText.text = InventoryString();
     }
 
     // Update is called once per frame
@@ -39,6 +50,14 @@ public class PlayerUI : MonoBehaviour
             EndingStateText.text = EndingString("Lose");
             Time.timeScale = 0;
         }
+
+        if(player.StolenItemsTotal == player.StolenItems.Count)
+        {
+            EndingStateText.text = EndingString("Completed the level");
+            Time.timeScale = 0;
+        }
+
+        InventoryText.text = InventoryString();
     }
 
     private string EndingString(string condition)
@@ -49,5 +68,16 @@ public class PlayerUI : MonoBehaviour
     private string DetectionString()
     {
         return DetectionAmount + "/" + DetectionMax + " detection";
+    }
+
+    private string InventoryString()
+    {
+        double total = 0;
+        foreach(var v in player.StolenItems)
+        {
+            total += v.Value;
+        }
+
+        return player.StolenItems.Count + " item(s) collected. \nTotal worth: " + total.ToString("c");
     }
 }

@@ -20,6 +20,8 @@ public class PlayerHand : Player
 
     private MeshRenderer render;
 
+    private PlayerController player;
+
     private void Awake()
     {
         armControl = new PlayerControl();
@@ -53,6 +55,11 @@ public class PlayerHand : Player
     {
         handColorNormal = GetComponent<Renderer>().material;
         render = GetComponent<MeshRenderer>();
+
+        if(player == null)
+        {
+            player = GameObject.Find("BasePlayer").GetComponent<PlayerController>();
+        }
         //handColorBase = handColorNormal;
     }
 
@@ -83,8 +90,7 @@ public class PlayerHand : Player
         {
             Debug.Log(arm.ToString() + " hand is grabbing the item");
 
-            GameObject stolenItem = other.GameObject();
-            stolenItem.SetActive(false);
+            AddToInventory(other);
         }
     }
 
@@ -93,13 +99,17 @@ public class PlayerHand : Player
         if(other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
             Debug.Log(arm.ToString() + " hand is grabbing the item");
-
-            GameObject stolenItem = other.GameObject();
-            stolenItem.SetActive(false);
+            AddToInventory(other);
         }
     }
 
+    //Double check this can work
+    private void AddToInventory(Collider other)
+    {
+        GameObject stolenItem = other.GameObject();
+        
+        player.StolenItems.Add(stolenItem.GetComponent<ExpensiveObject>());
 
-
-
+        stolenItem.SetActive(false);
+    }
 }
