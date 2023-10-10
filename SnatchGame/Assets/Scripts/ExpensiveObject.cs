@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ExpensiveObject : ExpensiveBase
 {
+    public GameObject FloatingTextPrefab;
+
     private Material objColorNormal;
 
     [SerializeField]
@@ -14,10 +16,6 @@ public class ExpensiveObject : ExpensiveBase
     [SerializeField]
     private string objName;
     
-    //[SerializeField]
-    //private double objValue;
-
-    // Start is called before the first frame update
     void Start()
     {
         Name = objName;
@@ -27,19 +25,27 @@ public class ExpensiveObject : ExpensiveBase
         rend = GetComponent<MeshRenderer>();
 
         Debug.Log(Name + " is worth: " + Value.ToString("c"));
+
+        //Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity, transform);
+
+        FloatingTextPrefab.SetActive(false);
+        FloatingTextPrefab.transform.position = this.transform.position;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
        
     }
 
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Hand"))
         {
             rend.material = objColorActive;
+            
+            FloatingTextPrefab.SetActive(true);
         }
     }
 
@@ -48,6 +54,7 @@ public class ExpensiveObject : ExpensiveBase
         if (other.gameObject.CompareTag("Hand"))
         {
             rend.material = objColorNormal;
+            FloatingTextPrefab.SetActive(false);
         }
     }
 }
