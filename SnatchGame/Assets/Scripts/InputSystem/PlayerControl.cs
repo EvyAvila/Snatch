@@ -88,7 +88,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""4334b77a-669a-4a04-8b20-c162212b49eb"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Xbox Control Scheme"",
@@ -99,7 +99,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""642dae82-2e35-4191-a5f2-f9c63710d69f"",
-                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Xbox Control Scheme"",
@@ -110,7 +110,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""9e87ef69-8287-4483-9d03-2c6c06c7e7f9"",
-                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Xbox Control Scheme"",
@@ -242,7 +242,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a09c2802-0121-48b1-b190-7a9a8a42524c"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Xbox Control Scheme"",
