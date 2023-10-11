@@ -78,6 +78,6 @@ public class PlayerUI : MonoBehaviour
             total += v.Value;
         }
 
-        return player.StolenItems.Count + " item(s) collected. \nTotal worth: " + total.ToString("c");
+        return player.StolenItems.Count + $"/{player.StolenItemsTotal} stolen item(s).  \nTotal worth: " + total.ToString("c");
     }
 }
