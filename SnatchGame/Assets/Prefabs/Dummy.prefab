@@ -5332,6 +5332,7 @@ MonoBehaviour:
   directionState: 4
   timerChangeDirection: 8
   walkingSpeed: 6
+  npcColorDetection: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
 --- !u!1 &8878826475995367569
 GameObject:
   m_ObjectHideFlags: 0

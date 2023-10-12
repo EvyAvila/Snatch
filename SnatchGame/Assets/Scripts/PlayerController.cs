@@ -6,12 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : Player
 {
     private PlayerControl controls;
-
     private InputAction moveAction;
-
-
     public List<ExpensiveObject> StolenItems;
     public int StolenItemsTotal;
+
+    [SerializeField]
+    private int speed;
+    [SerializeField]
+    private int rotateSpeed;
 
     private void Awake()
     {
@@ -31,8 +33,8 @@ public class PlayerController : Player
 
     void Start()
     {
-        Speed = 4;
-        RotateSpeed = 40;
+        Speed = speed;
+        RotateSpeed = rotateSpeed;
         StolenItems = new List<ExpensiveObject>();
         
         FindTotal();
@@ -52,6 +54,8 @@ public class PlayerController : Player
 
         transform.Rotate(0, -value.x * RotateSpeed * Time.deltaTime, 0);
         transform.Translate(Direction * Speed * Time.deltaTime);
+
+        Direction.Normalize();
     }
 
     private void FindTotal()

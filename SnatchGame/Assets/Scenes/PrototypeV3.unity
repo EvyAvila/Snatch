@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,7 +133,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.05
+      value: 15.4
       objectReference: {fileID: 0}
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.40999985
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: npcColorDetection
+      value: 
+      objectReference: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_Name
       value: Dummy2
@@ -1751,6 +1755,8 @@ MonoBehaviour:
   Direction: {x: 0, y: 0, z: 0}
   StolenItems: []
   StolenItemsTotal: 0
+  speed: 6
+  rotateSpeed: 70
 --- !u!114 &297155053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2040,6 +2046,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 0, z: 0}
   arm: 0
+  rotateSpeed: 75
 --- !u!1001 &368931927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2487,6 +2494,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: walkingSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: directionState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: npcColorDetection
+      value: 
+      objectReference: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: timerChangeDirection
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_Name
       value: Dummy3
@@ -2926,6 +2949,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: directionState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: npcColorDetection
+      value: 
+      objectReference: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: timerChangeDirection
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_Name
       value: Dummy5
@@ -3152,6 +3187,22 @@ PrefabInstance:
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: walkingSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: directionState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: npcColorDetection
+      value: 
+      objectReference: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: timerChangeDirection
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_Name
@@ -5672,6 +5723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 0, z: 0}
   arm: 1
+  rotateSpeed: 75
 --- !u!1 &1044956223
 GameObject:
   m_ObjectHideFlags: 0
@@ -9932,6 +9984,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: walkingSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: directionState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: npcColorDetection
+      value: 
+      objectReference: {fileID: 2100000, guid: 14cc6f26b1ccd0d45bcb83aa5df2f6ce, type: 2}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: timerChangeDirection
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_Name
       value: Dummy6
@@ -13964,6 +14032,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4444429468105222861, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7574448964807045850, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}
+      propertyPath: directionState
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8188302184406297226, guid: 176cbe9bb60ac864a89390b1e096cba9, type: 3}

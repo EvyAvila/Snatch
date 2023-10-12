@@ -11,15 +11,15 @@ public class PlayerArm : Player
     private PlayerControl armControl;
     
     private InputAction armAction;
-    //private InputAction handAction;
+   
 
     [SerializeField]
     private ArmState arm;
 
     private GameObject PlayerBase;
 
-    //[SerializeField]
-    //private GameObject PlayerHand;
+    [SerializeField]
+    private int rotateSpeed;
     
     private void Awake()
     {
@@ -32,28 +32,27 @@ public class PlayerArm : Player
         {
             case ArmState.Left:
                 armAction = armControl.Player.LeftArm;
-                //handAction = armControl.Player.LeftHand;
+               
                 break;
             case ArmState.Right:
                 armAction = armControl.Player.RightArm;
-                //handAction= armControl.Player.RightHand;
+                
                 break;
         }
         
         armAction.Enable();
-        //handAction.Enable();
+       
     }
 
     private void OnDisable()
     {
         armAction.Disable();
-        //handAction.Disable();
+        
     }
 
     void Start()
     {
-        Speed = 2;
-        RotateSpeed = 50;
+        RotateSpeed = rotateSpeed;
         PlayerBase = GameObject.Find("BasePlayer");
        
     }

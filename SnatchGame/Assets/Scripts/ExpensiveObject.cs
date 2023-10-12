@@ -31,7 +31,7 @@ public class ExpensiveObject : ExpensiveBase
     }
 
     
-    void Update()
+    void FixedUpdate()
     {
        
     }

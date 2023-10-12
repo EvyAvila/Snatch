@@ -16,10 +16,14 @@ public class Civilian : Entity
     [SerializeField]
     private float walkingSpeed;
 
-    //[SerializeField]
     private int rotationNumber;
 
     private PlayerUI playerUI;
+
+    [SerializeField]
+    private Material npcColorDetection;
+    private Material npcColorNormal;
+    private Renderer rend;
 
     void Start()
     {
@@ -30,6 +34,9 @@ public class Civilian : Entity
         {
             playerUI = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
         }
+
+        npcColorNormal = GetComponent<Renderer>().material;
+        rend = GetComponent<MeshRenderer>();
     }
 
     
@@ -87,17 +94,38 @@ public class Civilian : Entity
         StopAllCoroutines();
     }
 
-    private void OnTriggerStay(Collider other)
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            
-            StartCoroutine(DetectionIncrease(1));
+            DetectionActive(1);
         }
-            
     }
 
-    IEnumerator DetectionIncrease(int waitTime)
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            DetectionActive(2.5f);
+        }
+    }
+
+    private void DetectionActive(float num)
+    {
+        rend.material = npcColorDetection;
+        StartCoroutine(DetectionIncrease(num));
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            rend.material = npcColorNormal;
+        }
+    }
+
+    IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
 
