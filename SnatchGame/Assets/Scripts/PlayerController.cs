@@ -53,6 +53,12 @@ public class PlayerController : Player
         Direction.z = value.y; //I don't know why it won't take z
 
         transform.Rotate(0, -value.x * RotateSpeed * Time.deltaTime, 0);
+
+        if(!moveAction.IsPressed())
+        {
+            this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero; 
+        }
+
         transform.Translate(Direction * Speed * Time.deltaTime);
 
         Direction.Normalize();

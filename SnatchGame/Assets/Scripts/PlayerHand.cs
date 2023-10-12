@@ -88,8 +88,7 @@ public class PlayerHand : Player
 
         if (other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
-            Debug.Log(arm.ToString() + " hand is grabbing the item");
-
+            //Debug.Log(arm.ToString() + " hand is grabbing the item");
             AddToInventory(other);
         }
     }
@@ -98,7 +97,7 @@ public class PlayerHand : Player
     {
         if(other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
-            Debug.Log(arm.ToString() + " hand is grabbing the item");
+            //Debug.Log(arm.ToString() + " hand is grabbing the item");
             AddToInventory(other);
         }
     }

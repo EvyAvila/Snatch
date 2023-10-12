@@ -76,15 +76,6 @@ public class PlayerArm : Player
         else
         {
             transform.localRotation = Quaternion.Euler(0, PlayerBase.transform.rotation.y, 0);
-        }
-
-        
+        }        
     }
-
-    
-
-    
-
-
-
 }

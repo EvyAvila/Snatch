@@ -4,8 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum PlayerState { Lose, Win, Active, Market} //Active means the player is playing in game
+
 public class PlayerUI : MonoBehaviour
 {
+    public PlayerState playerState;
+
     [SerializeField]
     private TextMeshProUGUI DetectionText;
 
@@ -19,7 +23,20 @@ public class PlayerUI : MonoBehaviour
     private int DetectionMax;
 
     private PlayerController player;
-   
+
+    private void OnEnable()
+    {
+        DetectionText.gameObject.SetActive(true);
+        EndingStateText.gameObject.SetActive(true);
+        InventoryText.gameObject.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        DetectionText.gameObject.SetActive(false);
+        EndingStateText.gameObject.SetActive(false);
+        InventoryText.gameObject.SetActive(false);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +52,8 @@ public class PlayerUI : MonoBehaviour
         }
 
         InventoryText.text = InventoryString();
+
+        playerState = PlayerState.Active;
     }
 
     // Update is called once per frame
@@ -45,17 +64,36 @@ public class PlayerUI : MonoBehaviour
             DetectionText.text = DetectionString();
         }
         
+        //Lose
         if(DetectionAmount == DetectionMax)
         {
-            EndingStateText.text = EndingString("Lose");
-            Time.timeScale = 0;
+            //EndingStateText.text = EndingString("Lose");
+            playerState = PlayerState.Lose;
+            //Time.timeScale = 0;
         }
-
+        
+        //Win
         if(player.StolenItemsTotal == player.StolenItems.Count)
         {
-            EndingStateText.text = EndingString("Completed the level");
-            Time.timeScale = 0;
+            //EndingStateText.text = EndingString("Completed the level");
+            playerState = PlayerState.Win;
+
         }
+        
+        switch (playerState)
+        {
+            case PlayerState.Lose:
+                EndingStateText.text = EndingString("Lose");
+                break;
+            case PlayerState.Active:
+                EndingStateText.text = string.Empty;
+                break;
+            case PlayerState.Win:
+                EndingStateText.text = EndingString("Completed the level");
+                break;
+
+        }
+
 
         InventoryText.text = InventoryString();
     }
@@ -80,4 +118,6 @@ public class PlayerUI : MonoBehaviour
 
         return player.StolenItems.Count + $"/{player.StolenItemsTotal} stolen item(s).  \nTotal worth: " + total.ToString("c");
     }
+
+   
 }

@@ -24,8 +24,6 @@ public class ExpensiveObject : ExpensiveBase
         objColorNormal = GetComponent<Renderer>().material;
         rend = GetComponent<MeshRenderer>();
 
-        //Debug.Log(Name + " is worth: " + Value.ToString("c")); not needed atm
-
         FloatingTextPrefab.SetActive(false);
         FloatingTextPrefab.transform.position = this.transform.position;
     }
