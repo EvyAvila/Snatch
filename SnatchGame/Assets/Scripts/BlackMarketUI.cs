@@ -52,12 +52,20 @@ public class BlackMarketUI : MonoBehaviour
         ExitButton.onClick.AddListener(ExitButtonAction); //help from Unity Manual : https://docs.unity3d.com/530/Documentation/ScriptReference/UI.Button-onClick.html
 
         TokenText.text = TokenString();
+
+        ExitButton.enabled = false;
     }
 
     
     void Update()
     {
         TokenText.text = TokenString();
+
+        if (player.StolenItems.Count != player.StolenItemsTotal)
+        {
+            ExitButton.enabled = true;
+        }
+        
     }
 
     private string TokenString()
