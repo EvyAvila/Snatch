@@ -30,7 +30,7 @@ public class BlackMarketUI : MonoBehaviour
     private PlayerController player;
 
     [SerializeField]
-    private Transform ReturnPosition;
+    private Transform[] ReturnPosition;
 
     private void OnEnable()
     {
@@ -98,7 +98,10 @@ public class BlackMarketUI : MonoBehaviour
     {
         Debug.Log("Exit button clicked");
         player.GetComponent<PlayerUI>().playerState = PlayerState.Active;
-        player.gameObject.transform.position = ReturnPosition.position;
+
+        int random = Random.Range(0, ReturnPosition.Length);
+
+        player.gameObject.transform.position = ReturnPosition[random].position;
     }
 
     private void SetUIActivation(bool condition)

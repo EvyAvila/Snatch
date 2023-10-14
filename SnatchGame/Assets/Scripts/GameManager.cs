@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Transform ChangePosition;
     
     private PlayerController Player;
+    
     private bool isTeleporting = false;
 
     
