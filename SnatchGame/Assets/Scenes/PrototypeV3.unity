@@ -2048,8 +2048,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 18.29628, y: 5.974969, z: 12.624084}
-  m_Center: {x: -8.64814, y: 2.4874845, z: 0.11362457}
+  m_Size: {x: 26.976746, y: 5.974969, z: 12.624084}
+  m_Center: {x: -4.307907, y: 2.4874845, z: 0.11362457}
 --- !u!4 &306259904 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ddb35b14c36d3d54795246c262d7dedc, type: 3}
@@ -8409,7 +8409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 11.791199, y: 84.61864}
+  m_AnchoredPosition: {x: 11.791199, y: 118.9}
   m_SizeDelta: {x: 783.5824, y: 134}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!43 &1393277927
@@ -9130,7 +9130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6217903071860471869, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_Name
-      value: FloatText-RTrigger
+      value: FloatText-Triggers
       objectReference: {fileID: 0}
     - target: {fileID: 6217903071860471869, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_IsActive
@@ -9142,9 +9142,9 @@ PrefabInstance:
       objectReference: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
     - target: {fileID: 7396699694010825035, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_Text
-      value: 'Right Trigger
+      value: 'Right Trigger: Move forward
 
-        Move forward'
+        Left Triger: Move backward'
       objectReference: {fileID: 0}
     - target: {fileID: 7396699694010825035, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_Anchor
@@ -10069,7 +10069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6217903071860471869, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_Name
-      value: FloatText-LTrigger
+      value: FloatText-JoyStickClicks
       objectReference: {fileID: 0}
     - target: {fileID: 6217903071860471869, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_IsActive
@@ -10081,7 +10081,7 @@ PrefabInstance:
       objectReference: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
     - target: {fileID: 7396699694010825035, guid: 0625c22d182398148a58c61aff551abe, type: 3}
       propertyPath: m_Text
-      value: 'Left Trigger
+      value: 'Joystick Press
 
         Grab'
       objectReference: {fileID: 0}
@@ -14590,7 +14590,7 @@ Transform:
   m_GameObject: {fileID: 1955698182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.7, y: 2.25, z: 103.4}
+  m_LocalPosition: {x: 7.38, y: 2.25, z: 127.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

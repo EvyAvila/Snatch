@@ -26,16 +26,16 @@ public class PlayerUI : MonoBehaviour
 
     private void OnEnable()
     {
-        DetectionText.gameObject.SetActive(true);
-        EndingStateText.gameObject.SetActive(true);
-        InventoryText.gameObject.SetActive(true);
+        SetUIActivation(true);
     }
 
     private void OnDisable()
     {
-        DetectionText.gameObject.SetActive(false);
-        EndingStateText.gameObject.SetActive(false);
-        InventoryText.gameObject.SetActive(false);
+        if(DetectionText != null) //For some reason was getting a MissingException error when I playe and stop right away
+        {
+            SetUIActivation(false);
+        }
+        
     }
 
     // Start is called before the first frame update
@@ -59,27 +59,27 @@ public class PlayerUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(DetectionAmount <= DetectionMax)
+        if (DetectionAmount <= DetectionMax)
         {
             DetectionText.text = DetectionString();
         }
-        
+
         //Lose
-        if(DetectionAmount == DetectionMax)
+        if (DetectionAmount == DetectionMax)
         {
             //EndingStateText.text = EndingString("Lose");
             playerState = PlayerState.Lose;
             //Time.timeScale = 0;
         }
-        
+
         //Win
-        if(player.StolenItemsTotal == player.StolenItems.Count)
+        if (player.StolenItemsTotal == player.StolenItems.Count)
         {
             //EndingStateText.text = EndingString("Completed the level");
             playerState = PlayerState.Win;
 
         }
-        
+
         switch (playerState)
         {
             case PlayerState.Lose:
@@ -111,13 +111,18 @@ public class PlayerUI : MonoBehaviour
     private string InventoryString()
     {
         double total = 0;
-        foreach(var v in player.StolenItems)
+        foreach (var v in player.StolenItems)
         {
             total += v.Value;
         }
 
         return player.StolenItems.Count + $"/{player.StolenItemsTotal} stolen item(s).  \nTotal worth: " + total.ToString("c");
     }
+    private void SetUIActivation(bool condition)
+    {
+        DetectionText.gameObject.SetActive(condition);
+        EndingStateText.gameObject.SetActive(condition);
+        InventoryText.gameObject.SetActive(condition);
+    }
 
-   
 }

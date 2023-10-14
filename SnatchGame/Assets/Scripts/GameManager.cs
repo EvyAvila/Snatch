@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     
     private PlayerController Player;
     private bool isTeleporting = false;
+
     
+
     void Start()
     {
         Player = GameObject.Find("BasePlayer").GetComponent<PlayerController>();
