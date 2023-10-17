@@ -26,6 +26,8 @@ public class ExpensiveObject : ExpensiveBase
 
         FloatingTextPrefab.SetActive(false);
         FloatingTextPrefab.transform.position = this.transform.position;
+
+        Debug.Log(Value);
     }
 
     

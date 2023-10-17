@@ -79,11 +79,18 @@ public class BlackMarketUI : MonoBehaviour
         
         if(player.StolenItems.Count > 0)
         {
-            for (int i = 0; i < player.StolenItems.Count; i++)
+            TokenAmount += (int)Mathf.Round((int)player.StolenItems[0].Value / 10);
+
+            player.StolenItems.RemoveAt(0);
+
+
+
+            //TokenAmount++;
+            /*for (int i = 0; i < player.StolenItems.Count; i++)
             {
                 player.StolenItems.RemoveAt(i);
                 TokenAmount++;
-            }
+            }*/
         }
     }
     private void UpgradeButtonAction()

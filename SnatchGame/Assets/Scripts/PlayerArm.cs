@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,23 +60,28 @@ public class PlayerArm : Player
     
     void FixedUpdate()
     {
-        MoveArm();
-        
+        MoveArm(); 
     }
+
 
     private void MoveArm()
     {
         var value = armAction.ReadValue<Vector3>();
+
+        //Debug.Log(value);
         Direction.z = -value.x; //left and right
         Direction.x = -value.y; //forward and backward
-       
-        if(Direction.x != 0 || Direction.z != 0)
+
+        if (Direction.x != 0 || Direction.z != 0)
         {
-            transform.Rotate(-Direction * RotateSpeed * Time.deltaTime);
+            transform.Rotate(-Direction * RotateSpeed * Time.deltaTime);            
         }
         else
         {
             transform.localRotation = Quaternion.Euler(0, PlayerBase.transform.rotation.y, 0);
         }        
+        
     }
+
+    
 }
