@@ -28,6 +28,7 @@ public class Civilian : Entity
     void Start()
     {
         Speed = walkingSpeed;
+        
         SetDirection();
 
         if(playerUI == null)
@@ -39,7 +40,6 @@ public class Civilian : Entity
         rend = GetComponent<MeshRenderer>();
     }
 
-    
     void FixedUpdate()
     {
         MoveAround();
@@ -81,16 +81,45 @@ public class Civilian : Entity
 
     IEnumerator ChangeDirection()
     {
-        yield return new WaitForSeconds(timerChangeDirection);
+        yield return new WaitForSeconds(timerChangeDirection); //waiting for seconds
+
+        int StopChance = Random.Range(0, 2);
 
 
-        if(directionState != DirectionState.Idle)
+        switch (directionState) //Change the direction
         {
-            transform.Rotate(0, 180, 0);
+            case DirectionState.North:
+            case DirectionState.South:
+            case DirectionState.West:
+            case DirectionState.East:
+                if (StopChance == 1) //NPC is stopping
+                {
+                    int stop = Random.Range(1, 6);
+                    StartCoroutine(TempStop(stop));
+                }
+                else //NPC is moving
+                {
+                    Speed = walkingSpeed;
+                    transform.Rotate(0, 180, 0);
+                }
+                break;
         }
 
-        
+        /*
+        if (directionState != DirectionState.Idle && StopChance == 0) //The NPC is not stopping
+        {
+            
+        }*/
 
+
+
+        StopAllCoroutines();
+    }
+
+    IEnumerator TempStop(int num)
+    {
+        Speed = 0;
+        yield return new WaitForSeconds(num);
         StopAllCoroutines();
     }
 
