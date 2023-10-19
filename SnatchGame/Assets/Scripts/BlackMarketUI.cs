@@ -3,21 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using JetBrains.Annotations;
+using System.Linq;
 
 public class BlackMarketUI : MonoBehaviour
 {
-    [SerializeField]
-    private Button ExchangeButton;
-
-    /*
-    [SerializeField]
-    private Button UpgradeButton;
-
-    [SerializeField]
-    private Button PurchaseButton;*/
-
-    [SerializeField]
-    private Button ExitButton;
+    #region Fields
 
     [SerializeField]
     private TextMeshProUGUI TitleText;
@@ -32,6 +24,15 @@ public class BlackMarketUI : MonoBehaviour
     [SerializeField]
     private Transform[] ReturnPosition;
 
+    [SerializeField]
+    private GameObject PurchasePanel;
+
+    [SerializeField]
+    private Button[] ItemsToBuy;
+
+    [SerializeField]
+    private Button[] MenuButtons;
+    #endregion
     private void OnEnable()
     {
         SetUIActivation(true);
@@ -44,80 +45,157 @@ public class BlackMarketUI : MonoBehaviour
 
     void Start()
     {
-        player = GetComponent<PlayerController>();
+        player = GetComponent<PlayerController>();        
+        for(int i = 0; i < MenuButtons.Length; i++)
+        {
+            int buttonNum = i;
+            MenuButtons[i].onClick.AddListener(() => Menu(buttonNum));
+        }
 
-        ExchangeButton.onClick.AddListener(ExchangeButtonAction);
-        //UpgradeButton.onClick.AddListener(UpgradeButtonAction);
-        //PurchaseButton.onClick.AddListener(PurchaseButtonAction);
-        ExitButton.onClick.AddListener(ExitButtonAction); //help from Unity Manual : https://docs.unity3d.com/530/Documentation/ScriptReference/UI.Button-onClick.html
+        for (int i = 0; i < ItemsToBuy.Length; i++)
+        {
+            int buttonNum = i;
+            ItemsToBuy[i].onClick.AddListener(() => Items(buttonNum)); //Assistance from Chat.gpt and part from Unity Manual : https://docs.unity3d.com/530/Documentation/ScriptReference/UI.Button-onClick.html
+        }
 
         TokenText.text = TokenString();
 
-        ExitButton.enabled = false;
+        MenuButtons[MenuButtons.Length - 1].enabled = false;
+        MenuButtons[0].Select();
+        
+        PurchasePanel.SetActive(false);
+        
     }
 
-    
     void Update()
     {
         TokenText.text = TokenString();
 
-        if (player.StolenItems.Count != player.StolenItemsTotal)
+        if (player.StolenItems.Count != player.StolenItemsTotal && !PurchasePanel.activeInHierarchy )
         {
-            ExitButton.enabled = true;
+            MenuButtons[MenuButtons.Length-1].enabled = true;
         }
-        
     }
-
+    
     private string TokenString()
     {
         return "Token Amount: " + TokenAmount;
     }
 
-    private void ExchangeButtonAction()
+    private void Menu(int num)
     {
-        Debug.Log("Exchange button clicked");
-        
+        switch (num)
+        {
+            case 0:
+                ExchangeAction();
+                break;
+            case 1:
+                PurchaseAction();
+                break;
+            case 2:
+                ExitAction();
+                break;      
+        }
+    }
+
+    #region MenuActions
+    private void ExchangeAction()
+    {       
         if(player.StolenItems.Count > 0)
         {
             TokenAmount += (int)Mathf.Round((int)player.StolenItems[0].Value / 10);
 
             player.StolenItems.RemoveAt(0);
-
-
-
-            //TokenAmount++;
-            /*for (int i = 0; i < player.StolenItems.Count; i++)
-            {
-                player.StolenItems.RemoveAt(i);
-                TokenAmount++;
-            }*/
         }
     }
-    private void UpgradeButtonAction()
+    /*private void UpgradeButtonAction()
     {
         Debug.Log("Upgrade button clicked");
-    }
-    private void PurchaseButtonAction() 
+    }*/
+    private void PurchaseAction() 
     {
-        Debug.Log("Purchase button clicked");
+        PurchasePanel.SetActive(true);
+        SetUIEnabled(false);
+        BuyingSection();
+
     }
-    private void ExitButtonAction()
+    private void ExitAction()
     {
-        Debug.Log("Exit button clicked");
         player.GetComponent<PlayerUI>().playerState = PlayerState.Active;
 
         int random = Random.Range(0, ReturnPosition.Length);
 
         player.gameObject.transform.position = ReturnPosition[random].position;
     }
-
+    #endregion
+    #region UIActive
     private void SetUIActivation(bool condition)
     {
-        ExchangeButton.gameObject.SetActive(condition);
-        //UpgradeButton.gameObject.SetActive(condition);
-        //PurchaseButton.gameObject.SetActive(condition);
-        ExitButton.gameObject.SetActive(condition);
+        foreach(var v in MenuButtons)
+        {
+            v.gameObject.SetActive(condition);
+        }
+        
         TitleText.gameObject.SetActive(condition);
         TokenText.gameObject.SetActive(condition);
+
+        foreach(var v in ItemsToBuy)
+        {
+            v.gameObject.SetActive(condition);
+        }
+    }
+    private void SetUIEnabled(bool condition)
+    {
+        foreach(var v in MenuButtons)
+        {
+            v.enabled= condition;
+        }
+    }
+    #endregion
+    
+    private void BuyingSection()
+    {
+        ItemsToBuy[ItemsToBuy.Length - 1].Select();
+    }
+
+    private void Items(int num)
+    {
+       switch(num)
+       {
+            case 0:
+                //Debug.Log("Boot bought");
+                Calculation(10, ItemsToBuy, num);
+                
+                break;
+            case 1:
+                //Debug.Log("Gloves bought");
+                Calculation(5, ItemsToBuy, num);
+               
+                break;
+            case 2:
+                //Debug.Log("Jacket bought");
+                Calculation(15, ItemsToBuy, num);
+                break;
+            case 3:
+                //Debug.Log("Return");
+                PurchasePanel.SetActive(false);
+                SetUIEnabled(true);
+                MenuButtons[0].Select();
+                break;
+       }
+    }
+
+    private void Calculation(int price, Button[] b, int position)
+    {
+        if(price > TokenAmount)
+        {
+            Debug.Log("Not enough tokens");
+        }
+        else
+        {
+            TokenAmount -= price;
+            b[position].enabled = false;
+            ItemsToBuy[ItemsToBuy.Length - 1].Select();
+        }
     }
 }

@@ -74,7 +74,8 @@ public class PlayerArm : Player
 
         if (Direction.x != 0 || Direction.z != 0)
         {
-            transform.Rotate(-Direction * RotateSpeed * Time.deltaTime);            
+            transform.Rotate(-Direction * RotateSpeed * Time.deltaTime);
+            //transform.eulerAngles += -Direction * RotateSpeed * Time.deltaTime;
         }
         else
         {
