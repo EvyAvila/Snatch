@@ -32,6 +32,10 @@ public class BlackMarketUI : MonoBehaviour
 
     [SerializeField]
     private Button[] MenuButtons;
+
+    [SerializeField]
+    private GameObject[] ItemGameObjects;
+
     #endregion
     private void OnEnable()
     {
@@ -162,22 +166,20 @@ public class BlackMarketUI : MonoBehaviour
     {
        switch(num)
        {
-            case 0:
-                //Debug.Log("Boot bought");
-                Calculation(10, ItemsToBuy, num);
-                
+            case 0: //Boots
+                Calculation(10, ItemsToBuy, num, ItemGameObjects[0]);
                 break;
-            case 1:
-                //Debug.Log("Gloves bought");
-                Calculation(5, ItemsToBuy, num);
-               
+            case 1: //Gloves
+                Calculation(5, ItemsToBuy, num, ItemGameObjects[1]);
+                if (ItemGameObjects[1].activeSelf)
+                {
+                    ItemGameObjects[2].SetActive(true);
+                }
                 break;
-            case 2:
-                //Debug.Log("Jacket bought");
-                Calculation(15, ItemsToBuy, num);
+            case 2: //jacket
+                Calculation(15, ItemsToBuy, num, ItemGameObjects[3]);
                 break;
-            case 3:
-                //Debug.Log("Return");
+            case 3: //Return
                 PurchasePanel.SetActive(false);
                 SetUIEnabled(true);
                 MenuButtons[0].Select();
@@ -185,7 +187,7 @@ public class BlackMarketUI : MonoBehaviour
        }
     }
 
-    private void Calculation(int price, Button[] b, int position)
+    private void Calculation(int price, Button[] b, int position, GameObject g)
     {
         if(price > TokenAmount)
         {
@@ -196,6 +198,8 @@ public class BlackMarketUI : MonoBehaviour
             TokenAmount -= price;
             b[position].enabled = false;
             ItemsToBuy[ItemsToBuy.Length - 1].Select();
+            
+            g.SetActive(true);
         }
     }
 }
