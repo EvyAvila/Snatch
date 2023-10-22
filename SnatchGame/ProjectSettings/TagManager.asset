@@ -7,6 +7,7 @@ TagManager:
   - Item
   - Hand
   - Civilian
+  - Detective
   layers:
   - Default
   - TransparentFX

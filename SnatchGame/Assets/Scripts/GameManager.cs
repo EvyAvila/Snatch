@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     
     private bool isTeleporting = false;
 
+    //Rating system
     
 
     void Start()
