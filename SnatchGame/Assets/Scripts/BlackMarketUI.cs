@@ -12,10 +12,10 @@ public class BlackMarketUI : MonoBehaviour
     #region Fields
 
     [SerializeField]
-    private TextMeshProUGUI TitleText;
+    private Image TitleText;
 
     [SerializeField]
-    private TextMeshProUGUI TokenText;
+    private Image TokenText;
 
     private int TokenAmount;
 
@@ -35,6 +35,8 @@ public class BlackMarketUI : MonoBehaviour
 
     [SerializeField]
     private GameObject[] ItemGameObjects;
+
+    private int[] ItemCost = {10, 5, 20 };
 
     #endregion
     private void OnEnable()
@@ -62,18 +64,23 @@ public class BlackMarketUI : MonoBehaviour
             ItemsToBuy[i].onClick.AddListener(() => Items(buttonNum)); //Assistance from Chat.gpt and part from Unity Manual : https://docs.unity3d.com/530/Documentation/ScriptReference/UI.Button-onClick.html
         }
 
-        TokenText.text = TokenString();
+        //TokenText.text = TokenString();
+        TokenText.transform.Find("Token").GetComponent<TextMeshProUGUI>().text = TokenString();
 
         MenuButtons[MenuButtons.Length - 1].enabled = false;
         MenuButtons[0].Select();
         
         PurchasePanel.SetActive(false);
         
+        for(int i = 0; i < ItemsToBuy.Length - 1; i++)
+        {
+            ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
+        }
     }
 
     void Update()
     {
-        TokenText.text = TokenString();
+        TokenText.transform.Find("Token").GetComponent<TextMeshProUGUI>().text = TokenString();
 
         if (player.StolenItems.Count != player.StolenItemsTotal && !PurchasePanel.activeInHierarchy )
         {
@@ -167,17 +174,17 @@ public class BlackMarketUI : MonoBehaviour
        switch(num)
        {
             case 0: //Boots
-                Calculation(10, ItemsToBuy, num, ItemGameObjects[0]);
+                Calculation(ItemCost[0], ItemsToBuy, num, ItemGameObjects[0]);
                 break;
             case 1: //Gloves
-                Calculation(5, ItemsToBuy, num, ItemGameObjects[1]);
+                Calculation(ItemCost[1], ItemsToBuy, num, ItemGameObjects[1]);
                 if (ItemGameObjects[1].activeSelf)
                 {
                     ItemGameObjects[2].SetActive(true);
                 }
                 break;
             case 2: //jacket
-                Calculation(15, ItemsToBuy, num, ItemGameObjects[3]);
+                Calculation(ItemCost[2], ItemsToBuy, num, ItemGameObjects[3]);
                 break;
             case 3: //Return
                 PurchasePanel.SetActive(false);
@@ -200,6 +207,9 @@ public class BlackMarketUI : MonoBehaviour
             ItemsToBuy[ItemsToBuy.Length - 1].Select();
             
             g.SetActive(true);
+            b[position].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = string.Empty;
+            //ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
+
         }
     }
 }
