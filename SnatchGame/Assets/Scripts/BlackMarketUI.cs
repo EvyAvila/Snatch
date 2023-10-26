@@ -231,7 +231,8 @@ public class BlackMarketUI : MonoBehaviour
         else if(item.CompareTag("Gloves"))
         {
             //increase speed of arm movement
-            player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed += 10;
+            float armRotateSpeed = player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed;
+            player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
         }
     }
 }
