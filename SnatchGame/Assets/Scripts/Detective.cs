@@ -19,8 +19,7 @@ public class Detective : Entity
     [SerializeField]
     private GameObject Item;
 
-    private float timeRemaining;
-
+    public float timeRemaining { get; set; }
 
     [SerializeField]
     private Material npcColorDetection;

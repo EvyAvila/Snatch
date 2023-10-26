@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using JetBrains.Annotations;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class BlackMarketUI : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class BlackMarketUI : MonoBehaviour
     private int TokenAmount;
 
     private PlayerController player;
+    private Detective detective;
 
     [SerializeField]
     private Transform[] ReturnPosition;
@@ -52,6 +54,8 @@ public class BlackMarketUI : MonoBehaviour
     void Start()
     {
         player = GetComponent<PlayerController>();        
+        detective= GameObject.Find("Detective").GetComponent<Detective>();
+        
         for(int i = 0; i < MenuButtons.Length; i++)
         {
             int buttonNum = i;
@@ -208,8 +212,26 @@ public class BlackMarketUI : MonoBehaviour
             
             g.SetActive(true);
             b[position].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = string.Empty;
-            //ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
 
+            ChangeStats(g);
+        }
+    }
+
+    private void ChangeStats(GameObject item)
+    {
+        if (item.CompareTag("Boots"))
+        {
+            player.Speed = player.Speed + 5;
+        }
+        else if(item.CompareTag("Jacket"))
+        {
+            //lower timer of detective following player
+            detective.timeRemaining = detective.timeRemaining / 2;
+        }
+        else if(item.CompareTag("Gloves"))
+        {
+            //increase speed of arm movement
+            player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed += 10;
         }
     }
 }
