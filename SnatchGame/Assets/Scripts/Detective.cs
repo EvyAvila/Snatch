@@ -26,6 +26,8 @@ public class Detective : Entity
     private Material npcColorNormal;
     private Renderer rend;
 
+    public Vector3 detectivePosition { get; private set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,8 @@ public class Detective : Entity
         DoubleIncreasePoints = false;
 
         timeRemaining = 60;
+
+        detectivePosition = transform.position;
 
         if (playerUI == null)
         {

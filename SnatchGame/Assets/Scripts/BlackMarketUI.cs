@@ -38,7 +38,9 @@ public class BlackMarketUI : MonoBehaviour
     [SerializeField]
     private GameObject[] ItemGameObjects;
 
-    private int[] ItemCost = {10, 5, 20 };
+    private int[] ItemCost = {25, 15, 45 };
+
+    private GameManager gm;
 
     #endregion
     private void OnEnable()
@@ -55,6 +57,7 @@ public class BlackMarketUI : MonoBehaviour
     {
         player = GetComponent<PlayerController>();        
         detective= GameObject.Find("Detective").GetComponent<Detective>();
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         
         for(int i = 0; i < MenuButtons.Length; i++)
         {
@@ -141,6 +144,8 @@ public class BlackMarketUI : MonoBehaviour
         int random = Random.Range(0, ReturnPosition.Length);
 
         player.gameObject.transform.position = ReturnPosition[random].position;
+
+        gm.ResetObjects();
     }
     #endregion
     #region UIActive
@@ -232,7 +237,9 @@ public class BlackMarketUI : MonoBehaviour
         {
             //increase speed of arm movement
             float armRotateSpeed = player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed;
+           
             player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
+            player.gameObject.transform.Find("LeftArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
         }
     }
 }
