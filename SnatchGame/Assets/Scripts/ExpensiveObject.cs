@@ -19,21 +19,16 @@ public class ExpensiveObject : ExpensiveBase
     void Start()
     {
         Name = objName;
-        Value = Random.Range(50, 150);
-
         objColorNormal = GetComponent<Renderer>().material;
         rend = GetComponent<MeshRenderer>();
-
-        FloatingTextPrefab.SetActive(false);
-        FloatingTextPrefab.transform.position = this.transform.position;
-
+        SetObject();
         //Debug.Log(Value);
     }
 
     
     void FixedUpdate()
     {
-       
+        Debug.Log(Value.ToString("c"));
     }
 
     
@@ -54,5 +49,13 @@ public class ExpensiveObject : ExpensiveBase
             rend.material = objColorNormal;
             FloatingTextPrefab.SetActive(false);
         }
+    }
+
+    public void SetObject()
+    {
+        Value = Random.Range(50, 150);
+        rend.material = objColorNormal;
+        FloatingTextPrefab.SetActive(false);
+        FloatingTextPrefab.transform.position = this.transform.position;
     }
 }

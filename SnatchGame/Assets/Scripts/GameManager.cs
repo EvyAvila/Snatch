@@ -101,13 +101,13 @@ public class GameManager : MonoBehaviour
             if (!NPCSet[i].transform.Find("Object").gameObject.activeSelf)
             {
                 NPCSet[i].transform.Find("Object").gameObject.SetActive(true);
-                NPCSet[i].transform.Find("Object/FloatText").gameObject.SetActive(false);
+                NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
             }
             
         }
 
         Detective.transform.Find("Object").gameObject.SetActive(true);
-        Detective.transform.Find("Object/FloatText").gameObject.SetActive(false);
+        Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
         Detective.transform.position = Detective.GetComponent<Detective>().detectivePosition;
 
     }
