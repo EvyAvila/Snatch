@@ -8,7 +8,8 @@ public class PlayerController : Player
     private PlayerControl controls;
     private InputAction moveAction;
     public List<ExpensiveObject> StolenItems;
-    public int StolenItemsTotal;
+    public int StolenItemsTotal { get; set; }
+    public int GetTotal { get; set; }
 
     [SerializeField]
     private int speed;
@@ -67,7 +68,9 @@ public class PlayerController : Player
     private void FindTotal()
     {
         GameObject[] obj = GameObject.FindGameObjectsWithTag("Item");
+        GetTotal = obj.Length;
 
-        StolenItemsTotal = obj.Length;
+        //StolenItemsTotal = obj.Length;
+        StolenItemsTotal = (int)Mathf.Round(obj.Length / 2);
     }
 }

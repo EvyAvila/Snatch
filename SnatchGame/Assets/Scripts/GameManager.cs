@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject NPCCollection;
+
+    [SerializeField]
+    private GameObject NPCPositions;
+    
     [SerializeField]
     private GameObject Detective;
 
@@ -94,23 +98,47 @@ public class GameManager : MonoBehaviour
         Detective.SetActive(true);
         
         Civilian[] NPCSet = NPCCollection.GetComponentsInChildren<Civilian>();
+        Transform[] NPCPos = NPCPositions.GetComponentsInChildren<Transform>();
+
         for (int i = 0; i < NPCSet.Length; i++)
         {
             //GameObject npc = NPCSet[i].gameObject;
             //npc.transform.Find("Object").gameObject.SetActive(true);
             if (!NPCSet[i].transform.Find("Object").gameObject.activeSelf)
             {
+                ResetGame(NPCSet[i].gameObject);
+                /*
                 NPCSet[i].transform.Find("Object").gameObject.SetActive(true);
-                NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
+                NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();*/
+                
             }
             
         }
 
+        Transform[] npcPos = NPCCollection.GetComponentsInChildren<Transform>();
+
+        for(int i = 0; i < npcPos.Length; i++)
+        {
+           for(int j = 1; j < NPCPos.Length; j++)
+           {
+                npcPos[j].localPosition = NPCPos[j].localPosition;
+           }
+            
+            
+        }
+
+        /*
         Detective.transform.Find("Object").gameObject.SetActive(true);
-        Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
-        Detective.transform.position = Detective.GetComponent<Detective>().detectivePosition;
+        Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();*/
+        ResetGame(Detective);
+        
+        Detective.transform.localPosition = Detective.GetComponent<Detective>().detectivePosition.localPosition;
 
     }
 
-
+    private void ResetGame(GameObject obj)
+    {
+        obj.transform.Find("Object").gameObject.SetActive(true);
+        obj.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
+    }
 }
