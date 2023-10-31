@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -43,6 +44,7 @@ public class Civilian : Entity
     void FixedUpdate()
     {
         MoveAround();
+        //LookAtPlayer();
     }
 
     private void MoveAround()
@@ -162,4 +164,26 @@ public class Civilian : Entity
         
         StopAllCoroutines();
     }
+    
+    /*
+    private void LookAtPlayer()
+    {
+        var temp = this.directionState;
+        var tempRot = this.transform.rotation;
+
+        if(playerUI.PlayerAttention) //If penalty active => player has attention
+        {
+            Speed = 0;
+            directionState = DirectionState.Idle;
+            this.transform.LookAt(playerUI.GetComponent<PlayerController>().gameObject.transform);
+        }
+        else if(!playerUI.PlayerAttention && transform.rotation == tempRot)
+        {
+            Speed = walkingSpeed;
+            this.directionState = temp;
+            transform.Rotate(0, rotationNumber, 0);
+
+        }
+    }*/
+
 }

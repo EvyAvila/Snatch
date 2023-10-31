@@ -16,6 +16,16 @@ public class PlayerController : Player
     [SerializeField]
     private int rotateSpeed;
 
+    public float timeRemaining { get; set; }
+    private float timeDefault;
+
+    public float CooldownTimer { get; set; }
+    private float CooldownDefault;
+
+    public float DetectionMeterCount;
+
+    public bool PenaltyActive { get; private set; }
+
     private void Awake()
     {
         controls = new PlayerControl(); 
@@ -37,14 +47,22 @@ public class PlayerController : Player
         Speed = speed;
         RotateSpeed = rotateSpeed;
         StolenItems = new List<ExpensiveObject>();
-        
+        timeRemaining = 5;
+        timeDefault = timeRemaining;
+
+        CooldownTimer = 10;
+        CooldownDefault = CooldownTimer;
         FindTotal();
+        PenaltyActive= false;
+
+        DetectionMeterCount = 0;
         
     }
 
     void FixedUpdate()
     {
         MovePlayer();
+        
     }
 
     private void MovePlayer()
@@ -62,6 +80,8 @@ public class PlayerController : Player
 
         transform.Translate(Direction * Speed * Time.deltaTime);
 
+        MoveBackDetection();
+
         Direction.Normalize();
     }
 
@@ -72,5 +92,63 @@ public class PlayerController : Player
 
         //StolenItemsTotal = obj.Length;
         StolenItemsTotal = (int)Mathf.Round(obj.Length / 2);
+    }
+
+    public void MoveBackDetection()
+    {
+        //Z = 1 for moving backwards
+        switch (PenaltyActive)
+        {
+            case true:
+                //Debug.Log("Punished");
+                if(CooldownTimer > 0 && Direction.z != 1)
+                {
+                   // Debug.Log("cooldown in progress");
+                    CooldownTimer -= Time.deltaTime;
+                    DetectionMeterCount -= Time.deltaTime;
+                }
+                else if(CooldownTimer > 0 && Direction.z == 1)
+                {
+                    //Debug.Log("Reset cooldown");
+                    CooldownTimer = CooldownDefault;
+                    DetectionMeterCount = CooldownDefault;
+                }
+                else if(CooldownTimer <= 0)
+                {
+                    //Debug.Log("cooldown over");
+                    PenaltyActive = false;
+                    CooldownTimer = CooldownDefault;
+                    timeRemaining = timeDefault;
+                    DetectionMeterCount = 0;
+                }
+                break;
+            case false:
+                if (Direction.z == 1 && timeRemaining > 0) //Count down timer if using backwards
+                {
+                    timeRemaining -= Time.deltaTime;
+                    DetectionMeterCount += Time.deltaTime;
+                    //Debug.Log("Moving back detecting...");
+                }
+                else if (Direction.z == 0 && timeRemaining > 0) //If player stops before timer, reset
+                {
+                    if(timeRemaining <= timeDefault)
+                    {
+                        timeRemaining += Time.deltaTime;
+                        DetectionMeterCount -= Time.deltaTime;
+                    }
+                    //timeRemaining = timeDefault;
+                    //DetectionMeterCount = 0;
+                    //Debug.Log("Stopped moving back");
+                }
+                else if (timeRemaining <= 0) //If player goes too long
+                {
+                    //Debug.Log("Moving back too long");
+                    PenaltyActive = true;
+                }
+                break;
+        }
+
+
+        
     }
 }

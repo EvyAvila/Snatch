@@ -19,10 +19,18 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI InventoryText;
 
+    [SerializeField]
+    private Slider DetectionSlider;
+
     public int DetectionAmount { get; set; }
+    private float DetectionMaxValue;
+    private float CooldownMaxValue;
+    
     private int DetectionMax;
 
     private PlayerController player;
+
+    public bool PlayerAttention { get; private set; }
 
     private void OnEnable()
     {
@@ -41,7 +49,7 @@ public class PlayerUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DetectionMax = 10;
+        DetectionMax = 20;
         DetectionText.text = DetectionString();
 
         EndingStateText.text = "";
@@ -54,6 +62,13 @@ public class PlayerUI : MonoBehaviour
         InventoryText.text = InventoryString();
 
         playerState = PlayerState.Active;
+
+        DetectionMaxValue = player.timeRemaining;
+        CooldownMaxValue = player.CooldownTimer;
+
+        DetectionSlider.value = 0;
+        PlayerAttention = false;
+        //DetectionSlider.maxValue = player.timeRemaining;
     }
 
     // Update is called once per frame
@@ -93,9 +108,11 @@ public class PlayerUI : MonoBehaviour
                 break;
 
         }
-
-
         InventoryText.text = InventoryString();
+
+        ChangeSlider();
+
+        PlayerAttention = player.PenaltyActive;
     }
 
     private string EndingString(string condition)
@@ -123,6 +140,35 @@ public class PlayerUI : MonoBehaviour
         DetectionText.gameObject.SetActive(condition);
         EndingStateText.gameObject.SetActive(condition);
         InventoryText.gameObject.SetActive(condition);
+        DetectionSlider.gameObject.SetActive(condition);
     }
 
+    private void ChangeSlider()
+    {
+        switch (player.PenaltyActive)
+        {
+            case true:
+                DetectionSlider.maxValue = CooldownMaxValue;
+                DetectionSlider.value = player.DetectionMeterCount;
+
+                StartCoroutine(DetectionIncrease(4));
+
+                break;
+            case false:
+                DetectionSlider.maxValue = DetectionMaxValue;
+                DetectionSlider.value = player.DetectionMeterCount;
+                break;
+        }
+
+        
+    }
+
+    IEnumerator DetectionIncrease(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        DetectionAmount += 2;
+
+        StopAllCoroutines();
+    }
 }

@@ -28,7 +28,7 @@ public class ExpensiveObject : ExpensiveBase
     
     void FixedUpdate()
     {
-        Debug.Log(Value.ToString("c"));
+        //Debug.Log(Value.ToString("c"));
     }
 
     
