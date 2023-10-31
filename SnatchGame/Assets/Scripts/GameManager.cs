@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
         Detective.SetActive(true);
         
         Civilian[] NPCSet = NPCCollection.GetComponentsInChildren<Civilian>();
-        Transform[] NPCPos = NPCPositions.GetComponentsInChildren<Transform>();
+        //Transform[] NPCPos = NPCPositions.GetComponentsInChildren<Transform>();
 
         for (int i = 0; i < NPCSet.Length; i++)
         {
@@ -107,29 +107,30 @@ public class GameManager : MonoBehaviour
             if (!NPCSet[i].transform.Find("Object").gameObject.activeSelf)
             {
                 ResetGame(NPCSet[i].gameObject);
-                /*
-                NPCSet[i].transform.Find("Object").gameObject.SetActive(true);
-                NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();*/
+                
+                //NPCSet[i].transform.Find("Object").gameObject.SetActive(true);
+                //NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
                 
             }
             
         }
 
+        /*
         Transform[] npcPos = NPCCollection.GetComponentsInChildren<Transform>();
 
-        for(int i = 0; i < npcPos.Length; i++)
+        for(int i = 1; i < npcPos.Length; i++)
         {
-           for(int j = 1; j < NPCPos.Length; j++)
+           for(int j = 2; j < NPCPos.Length; j++)
            {
                 npcPos[j].localPosition = NPCPos[j].localPosition;
            }
             
             
-        }
+        }*/
 
-        /*
-        Detective.transform.Find("Object").gameObject.SetActive(true);
-        Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();*/
+        
+        //Detective.transform.Find("Object").gameObject.SetActive(true);
+        //Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
         ResetGame(Detective);
         
         Detective.transform.localPosition = Detective.GetComponent<Detective>().detectivePosition.localPosition;

@@ -107,7 +107,7 @@ public class PlayerController : Player
                     CooldownTimer -= Time.deltaTime;
                     DetectionMeterCount -= Time.deltaTime;
                 }
-                else if(CooldownTimer > 0 && Direction.z == 1)
+                else if(CooldownTimer > 0 && Direction.z > 0 || Direction.z == 1)
                 {
                     //Debug.Log("Reset cooldown");
                     CooldownTimer = CooldownDefault;
@@ -123,7 +123,7 @@ public class PlayerController : Player
                 }
                 break;
             case false:
-                if (Direction.z == 1 && timeRemaining > 0) //Count down timer if using backwards
+                if (Direction.z > 0 && timeRemaining > 0) //Count down timer if using backwards
                 {
                     timeRemaining -= Time.deltaTime;
                     DetectionMeterCount += Time.deltaTime;
