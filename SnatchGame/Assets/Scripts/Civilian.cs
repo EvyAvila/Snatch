@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -49,6 +50,11 @@ public class Civilian : Entity
 
     private void MoveAround()
     {      
+        if(directionState == DirectionState.Idle)
+        {
+            ForceStopMovement();
+        }
+
         transform.Translate(Direction * Speed * Time.deltaTime);
 
         StartCoroutine(ChangeDirection());
@@ -165,6 +171,13 @@ public class Civilian : Entity
         StopAllCoroutines();
     }
     
+    private void ForceStopMovement()
+    {
+        this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        Direction.x = 0;
+        Direction.z = 0;
+    }
+
     /*
     private void LookAtPlayer()
     {

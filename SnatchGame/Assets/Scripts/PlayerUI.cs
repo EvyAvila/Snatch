@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,12 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI InventoryText;
 
+    /*
     [SerializeField]
-    private Slider DetectionSlider;
+    private Slider PenalitySlider;*/
+
+    [SerializeField]
+    private TextMeshProUGUI PenaltyText;
 
     public int DetectionAmount { get; set; }
     private float DetectionMaxValue;
@@ -66,9 +71,14 @@ public class PlayerUI : MonoBehaviour
         DetectionMaxValue = player.timeRemaining;
         CooldownMaxValue = player.CooldownTimer;
 
-        DetectionSlider.value = 0;
+        //PenalitySlider.value = 0;
         PlayerAttention = false;
-        //DetectionSlider.maxValue = player.timeRemaining;
+
+        DetectionText.transform.Find("DetectionBar").GetComponent<Slider>().maxValue = DetectionMax;
+        InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().maxValue = player.StolenItemsTotal;
+        PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = 0;
+        
+        //PenalitySlider.maxValue = player.timeRemaining;
     }
 
     // Update is called once per frame
@@ -77,6 +87,7 @@ public class PlayerUI : MonoBehaviour
         if (DetectionAmount <= DetectionMax)
         {
             DetectionText.text = DetectionString();
+            
         }
 
         //Lose
@@ -110,6 +121,19 @@ public class PlayerUI : MonoBehaviour
         }
         InventoryText.text = InventoryString();
 
+        if (PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value == 0)
+        {
+            PenaltyText.text = string.Empty;
+        }
+        else if(player.PenaltyActive)
+        {
+            PenaltyText.text = "Lay low, you're being suspicious";
+        }
+        else
+        {
+            PenaltyText.text = "Warning...";
+        }
+
         ChangeSlider();
 
         PlayerAttention = player.PenaltyActive;
@@ -122,7 +146,9 @@ public class PlayerUI : MonoBehaviour
 
     private string DetectionString()
     {
-        return DetectionAmount + "/" + DetectionMax + " detection";
+        //return DetectionAmount + "/" + DetectionMax + " detection";
+        DetectionText.transform.Find("DetectionBar").GetComponent<Slider>().value = DetectionAmount;
+        return "Detection:";
     }
 
     private string InventoryString()
@@ -133,14 +159,18 @@ public class PlayerUI : MonoBehaviour
             total += v.Value;
         }
 
-        return player.StolenItems.Count + $"/{player.StolenItemsTotal} stolen item(s).  \nTotal worth: " + total.ToString("c");
+        InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().maxValue = player.StolenItemsTotal;//This is here to make sure it updates when the user gets the upgrade
+        InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().value = player.StolenItems.Count;
+
+        //return player.StolenItems.Count + $"/{player.StolenItemsTotal} stolen item(s).  \nTotal worth: " + total.ToString("c");
+        return "Inventory: \nTotal worth: " + total.ToString("c");
     }
     private void SetUIActivation(bool condition)
     {
         DetectionText.gameObject.SetActive(condition);
         EndingStateText.gameObject.SetActive(condition);
         InventoryText.gameObject.SetActive(condition);
-        DetectionSlider.gameObject.SetActive(condition);
+        PenaltyText.gameObject.SetActive(condition);
     }
 
     private void ChangeSlider()
@@ -148,19 +178,17 @@ public class PlayerUI : MonoBehaviour
         switch (player.PenaltyActive)
         {
             case true:
-                DetectionSlider.maxValue = CooldownMaxValue;
-                DetectionSlider.value = player.DetectionMeterCount;
+                PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().maxValue = CooldownMaxValue;
+                PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = player.DetectionMeterCount;
 
                 StartCoroutine(DetectionIncrease(4));
 
                 break;
             case false:
-                DetectionSlider.maxValue = DetectionMaxValue;
-                DetectionSlider.value = player.DetectionMeterCount;
+                PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().maxValue = DetectionMaxValue;
+                PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = player.DetectionMeterCount;
                 break;
-        }
-
-        
+        } 
     }
 
     IEnumerator DetectionIncrease(float waitTime)

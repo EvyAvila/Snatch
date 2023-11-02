@@ -38,6 +38,9 @@ public class BlackMarketUI : MonoBehaviour
     [SerializeField]
     private GameObject[] ItemGameObjects;
 
+    [SerializeField]
+    private TextMeshProUGUI DenyPurchaseText;
+
     private int[] ItemCost = {25, 15, 45 };
 
     private GameManager gm;
@@ -83,6 +86,8 @@ public class BlackMarketUI : MonoBehaviour
         {
             ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
         }
+
+        
     }
 
     void Update()
@@ -133,6 +138,7 @@ public class BlackMarketUI : MonoBehaviour
     private void PurchaseAction() 
     {
         PurchasePanel.SetActive(true);
+        DenyPurchaseText.gameObject.SetActive(false);
         SetUIEnabled(false);
         BuyingSection();
 
@@ -158,6 +164,7 @@ public class BlackMarketUI : MonoBehaviour
         
         TitleText.gameObject.SetActive(condition);
         TokenText.gameObject.SetActive(condition);
+        DenyPurchaseText.gameObject.SetActive(condition);
 
         foreach(var v in ItemsToBuy)
         {
@@ -207,7 +214,8 @@ public class BlackMarketUI : MonoBehaviour
     {
         if(price > TokenAmount)
         {
-            Debug.Log("Not enough tokens");
+            //Debug.Log("Not enough tokens");
+            StartCoroutine(DisplayDenyPurchaseText());
         }
         else
         {
@@ -243,5 +251,13 @@ public class BlackMarketUI : MonoBehaviour
             player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
             player.gameObject.transform.Find("LeftArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
         }
+    }
+
+    IEnumerator DisplayDenyPurchaseText()
+    {
+        DenyPurchaseText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2);
+        DenyPurchaseText.gameObject.SetActive(false);
+        StopAllCoroutines();
     }
 }
