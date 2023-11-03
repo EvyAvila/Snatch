@@ -176,7 +176,6 @@ public class Civilian : Entity
         StartCoroutine(DetectionIncrease(num));
     }
 
-    //Should this also be included in detective script? 
     private void FallAction()
     {
         Fall = true;

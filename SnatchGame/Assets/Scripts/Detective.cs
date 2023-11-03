@@ -26,9 +26,15 @@ public class Detective : Entity
     private Material npcColorNormal;
     private Renderer rend;
 
-    //public Vector3 detectivePosition { get; private set; }
-
     public Transform detectivePosition;
+
+    private float timeRemain;
+    private float timeDefault;
+
+    [SerializeField]
+    private bool Fall;
+
+    private Rigidbody rig;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +57,14 @@ public class Detective : Entity
 
         npcColorNormal = GetComponent<Renderer>().material;
         rend = GetComponent<MeshRenderer>();
+
+        timeRemain = 5;
+        timeDefault = timeRemain;
+        Fall = false;
+        Physics.gravity = new Vector3(0, -70, 0); //From https://forum.unity.com/threads/global-gravity-setting.610/
+
+        rig = GetComponent<Rigidbody>();
+        rig.freezeRotation = true;
     }
 
     // Update is called once per frame
@@ -69,6 +83,11 @@ public class Detective : Entity
                 FollowPlayerTimer();
             }
         }
+
+        if(Fall)
+        {
+            ResetPosition();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -84,6 +103,7 @@ public class Detective : Entity
     private void DetectionActive(float num)
     {
         rend.material = npcColorDetection;
+        FallAction();
         StartCoroutine(DetectionIncrease(num));
     }
 
@@ -137,5 +157,29 @@ public class Detective : Entity
         }
     }
 
+    private void FallAction()
+    {
+        Fall = true;
+
+        rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
+
+        this.transform.Rotate(90 * 0.5f * Time.deltaTime, 0, 0);
+    }
+
+
+    private void ResetPosition()
+    {
+        if (timeRemain > 0)
+        {
+            timeRemain -= Time.deltaTime;
+        }
+        else
+        {
+            this.transform.rotation = new Quaternion(0, 0, 0, 0);
+            Fall = false;
+            timeRemain = timeDefault;
+            rig.freezeRotation = true;
+        }
+    }
    
 }
