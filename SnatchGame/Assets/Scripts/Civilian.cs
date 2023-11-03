@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Analytics;
 
-enum DirectionState { North, South, East, West, Idle}
+enum DirectionState { North, South, East, West, Idle, Fall }
 
 public class Civilian : Entity
 {
     [SerializeField]
     private DirectionState directionState;
+
+    private DirectionState originalState;
 
     [SerializeField]
     private int timerChangeDirection;
@@ -27,30 +30,55 @@ public class Civilian : Entity
     private Material npcColorNormal;
     private Renderer rend;
 
+    private float timeRemaining;
+    private float timeDefault;
+
+    [SerializeField]
+    private bool Fall;
+
+    private Rigidbody rig;
+
     void Start()
     {
+        timeRemaining = 5;
+        timeDefault = timeRemaining;
+
         Speed = walkingSpeed;
-        
+
+        Fall = false;
+        originalState = directionState;
+
         SetDirection();
 
-        if(playerUI == null)
+        if (playerUI == null)
         {
             playerUI = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
         }
 
         npcColorNormal = GetComponent<Renderer>().material;
         rend = GetComponent<MeshRenderer>();
+
+        Physics.gravity = new Vector3(0, -70, 0); //From https://forum.unity.com/threads/global-gravity-setting.610/
+
+        rig = GetComponent<Rigidbody>();
+        rig.freezeRotation = true;
     }
 
     void FixedUpdate()
     {
         MoveAround();
+
+        if(directionState == DirectionState.Fall && Fall) //if state is fall and fall is true
+        {
+            ResetRotation();
+        }
+ 
         //LookAtPlayer();
     }
 
     private void MoveAround()
-    {      
-        if(directionState == DirectionState.Idle)
+    {
+        if (directionState == DirectionState.Idle)
         {
             ForceStopMovement();
         }
@@ -84,7 +112,7 @@ public class Civilian : Entity
                 break;
         }
         transform.Rotate(0, rotationNumber, 0);
-       
+
     }
 
     IEnumerator ChangeDirection()
@@ -112,14 +140,6 @@ public class Civilian : Entity
                 }
                 break;
         }
-
-        /*
-        if (directionState != DirectionState.Idle && StopChance == 0) //The NPC is not stopping
-        {
-            
-        }*/
-
-
 
         StopAllCoroutines();
     }
@@ -151,7 +171,20 @@ public class Civilian : Entity
     private void DetectionActive(float num)
     {
         rend.material = npcColorDetection;
+        FallAction();
+
         StartCoroutine(DetectionIncrease(num));
+    }
+
+    //Should this also be included in detective script? 
+    private void FallAction()
+    {
+        Fall = true;
+        directionState = DirectionState.Fall;
+
+        rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
+
+        this.transform.Rotate(90 * 0.5f * Time.deltaTime, 0, 0);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -165,12 +198,10 @@ public class Civilian : Entity
     IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-
         playerUI.DetectionAmount++;
-        
         StopAllCoroutines();
     }
-    
+
     private void ForceStopMovement()
     {
         this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -178,6 +209,21 @@ public class Civilian : Entity
         Direction.z = 0;
     }
 
+    private void ResetRotation()
+    {
+        if(timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            this.transform.rotation = new Quaternion(0,0,0,0);
+            Fall = false;
+            timeRemaining = timeDefault;
+            directionState = originalState;
+            rig.freezeRotation = true;
+        }
+    }
     /*
     private void LookAtPlayer()
     {
