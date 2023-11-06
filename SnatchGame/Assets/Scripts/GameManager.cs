@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if(!isTeleporting)
         {
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
             {
                 case PlayerState.Lose:
                     Time.timeScale = 0;
+                    
                     break;
                 case PlayerState.Active:
                     Time.timeScale = 1;
@@ -63,7 +65,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-       
+        if(playerStatus.playerState == PlayerState.Lose)
+        {
+            ReturnToMenu();
+        }
         //Debug.Log(playerStatus.playerState);
     }
 
@@ -141,5 +146,15 @@ public class GameManager : MonoBehaviour
     {
         obj.transform.Find("Object").gameObject.SetActive(true);
         obj.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
+    }
+
+    private void ReturnToMenu()
+    {
+        if(Player.selectAction.IsPressed())
+        {
+            SceneManager.LoadScene(1);
+            //Debug.Log("Reset works");
+        }  
+        
     }
 }

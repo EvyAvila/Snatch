@@ -7,6 +7,8 @@ public class PlayerController : Player
 {
     private PlayerControl controls;
     private InputAction moveAction;
+    public InputAction selectAction { get; private set; }
+
     public List<ExpensiveObject> StolenItems;
     public int StolenItemsTotal { get; set; }
     public int GetTotal { get; set; }
@@ -35,11 +37,15 @@ public class PlayerController : Player
     {
         moveAction = controls.Player.Move;
         moveAction.Enable();
+
+        selectAction = controls.Player.Select;
+        selectAction.Enable();
     }
 
     private void OnDisable()
     {
         moveAction.Disable();
+        selectAction.Disable();
     }
 
     void Start()
@@ -62,7 +68,6 @@ public class PlayerController : Player
     void FixedUpdate()
     {
         MovePlayer();
-        
     }
 
     private void MovePlayer()

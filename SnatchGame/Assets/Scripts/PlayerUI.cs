@@ -109,7 +109,7 @@ public class PlayerUI : MonoBehaviour
         switch (playerState)
         {
             case PlayerState.Lose:
-                EndingStateText.text = EndingString("Lose");
+                EndingStateText.text = EndingString("Lose \nPress any button to restart game.");
                 break;
             case PlayerState.Active:
                 EndingStateText.text = string.Empty;
@@ -119,6 +119,7 @@ public class PlayerUI : MonoBehaviour
                 break;
 
         }
+        
         InventoryText.text = InventoryString();
 
         if (PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value == 0)
