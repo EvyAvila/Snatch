@@ -41,9 +41,11 @@ public class BlackMarketUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI DenyPurchaseText;
 
-    private int[] ItemCost = {25, 15, 45 };
+    private int[] ItemCost = {30, 20, 50 };
 
     private GameManager gm;
+
+    private bool SetButtonSelection;
 
     #endregion
     private void OnEnable()
@@ -58,6 +60,7 @@ public class BlackMarketUI : MonoBehaviour
 
     void Start()
     {
+        SetButtonSelection = true;
         player = GetComponent<PlayerController>();        
         //detective= GameObject.Find("Detective").GetComponent<Detective>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -78,6 +81,7 @@ public class BlackMarketUI : MonoBehaviour
         TokenText.transform.Find("Token").GetComponent<TextMeshProUGUI>().text = TokenString();
 
         MenuButtons[MenuButtons.Length - 1].enabled = false;
+        
         MenuButtons[0].Select();
         
         PurchasePanel.SetActive(false);
@@ -92,11 +96,20 @@ public class BlackMarketUI : MonoBehaviour
 
     void Update()
     {
+       
+
         TokenText.transform.Find("Token").GetComponent<TextMeshProUGUI>().text = TokenString();
 
+        //if (player.StolenItems.Count != player.StolenItemsTotal && !PurchasePanel.activeInHierarchy )
         if (player.StolenItems.Count != player.StolenItemsTotal && !PurchasePanel.activeInHierarchy )
         {
             MenuButtons[MenuButtons.Length-1].enabled = true;
+            
+        }
+        else
+        {
+            MenuButtons[MenuButtons.Length - 1].enabled = false;
+            
         }
     }
     
@@ -152,6 +165,8 @@ public class BlackMarketUI : MonoBehaviour
         player.gameObject.transform.position = ReturnPosition[random].position;
 
         gm.ResetObjects();
+
+        MenuButtons[0].Select();
     }
     #endregion
     #region UIActive
