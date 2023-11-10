@@ -11,6 +11,9 @@ TagManager:
   - Boots
   - Jacket
   - Gloves
+  - Corner
+  - Vehicle
+  - Ground
   layers:
   - Default
   - TransparentFX

@@ -78,6 +78,7 @@ public class PlayerUI : MonoBehaviour
         InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().maxValue = player.StolenItemsTotal;
         PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = 0;
         
+        //Physics.gravity = new Vector3(0, -70, 0);
         //PenalitySlider.maxValue = player.timeRemaining;
     }
 

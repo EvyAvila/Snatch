@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 public class PlayerController : Player
 {
@@ -18,6 +19,14 @@ public class PlayerController : Player
     [SerializeField]
     private int rotateSpeed;
 
+    bool TouchGround;
+    private bool Fall;
+
+    private Rigidbody rig;
+
+    private float fallRemaining;
+    private float fallDefault;
+
     public float timeRemaining { get; set; }
     private float timeDefault;
 
@@ -27,7 +36,7 @@ public class PlayerController : Player
     public float DetectionMeterCount;
 
     public bool PenaltyActive { get; private set; }
-
+    
     private void Awake()
     {
         controls = new PlayerControl(); 
@@ -62,12 +71,37 @@ public class PlayerController : Player
         PenaltyActive= false;
 
         DetectionMeterCount = 0;
-        
+        TouchGround = false;
+
+        //Physics.gravity = new Vector3(0, -7, 0);
+        rig = GetComponent<Rigidbody>();
+        rig.freezeRotation = true;
+        Fall = false;
+
+        fallRemaining = 3;
+        fallDefault = fallRemaining;
     }
 
     void FixedUpdate()
     {
-        MovePlayer();
+        /*
+        if(!TouchGround)
+        {
+           
+            //this.transform.position += Vector3.down * 2 * Time.deltaTime;
+        }*/
+        
+        if(Fall)
+        {
+            ResetRotation();
+        }
+        else
+        {
+            MovePlayer();
+        }
+
+       
+
     }
 
     private void MovePlayer()
@@ -78,7 +112,7 @@ public class PlayerController : Player
 
         transform.Rotate(0, -value.x * RotateSpeed * Time.deltaTime, 0);
 
-        if(!moveAction.IsPressed())
+        if(!moveAction.IsPressed() && TouchGround)
         {
             this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero; 
         }
@@ -156,4 +190,56 @@ public class PlayerController : Player
 
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        if (collision.gameObject.CompareTag("Vehicle"))
+        {
+            //this.transform.position += Vector3.back * 15;
+           
+
+            FallAction();
+        }
+       
+
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            TouchGround= true;
+        }
+        else
+        {
+            TouchGround= false;
+        }
+    }
+
+
+    private void FallAction()
+    {
+        Fall = true;
+
+        rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
+        this.transform.position += Vector3.up * 15 * Time.deltaTime;
+
+        
+
+        this.transform.Rotate(0,0, -135 * 4 * Time.deltaTime);
+    }
+
+    private void ResetRotation()
+    {
+        if (fallRemaining > 0)
+        {
+            fallRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            this.transform.rotation = new Quaternion(0, 0, 0, 0);
+            Fall = false;
+            fallRemaining = fallDefault;
+           
+            rig.freezeRotation = true;
+        }
+    }
+
 }

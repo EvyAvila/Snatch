@@ -45,7 +45,7 @@ public class BlackMarketUI : MonoBehaviour
 
     private GameManager gm;
 
-    private bool SetButtonSelection;
+    //private bool SetButtonSelection;
 
     #endregion
     private void OnEnable()
@@ -60,7 +60,7 @@ public class BlackMarketUI : MonoBehaviour
 
     void Start()
     {
-        SetButtonSelection = true;
+        //SetButtonSelection = true;
         player = GetComponent<PlayerController>();        
         //detective= GameObject.Find("Detective").GetComponent<Detective>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -90,8 +90,8 @@ public class BlackMarketUI : MonoBehaviour
         {
             ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
         }
+        //Physics.gravity = new Vector3(0, -70, 0);
 
-        
     }
 
     void Update()
