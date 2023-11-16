@@ -41,9 +41,11 @@ public class BlackMarketUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI DenyPurchaseText;
 
-    private int[] ItemCost = {30, 20, 50 };
+    private int[] ItemCost = {10, 30, 20, 50 };
 
     private GameManager gm;
+
+    private PlayerUI playerUI;
 
     //private bool SetButtonSelection;
 
@@ -91,7 +93,9 @@ public class BlackMarketUI : MonoBehaviour
             ItemsToBuy[i].transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = ItemCost[i] + " tokens";
         }
         //Physics.gravity = new Vector3(0, -70, 0);
+        playerUI = GetComponent<PlayerUI>();
 
+        DenyText(0, DenyPurchaseText);
     }
 
     void Update()
@@ -204,20 +208,24 @@ public class BlackMarketUI : MonoBehaviour
     {
        switch(num)
        {
-            case 0: //Boots
-                Calculation(ItemCost[0], ItemsToBuy, num, ItemGameObjects[0]);
+            case 0:
+                ReductionDetectionCalculation(ItemCost[0]);
                 break;
-            case 1: //Gloves
+
+            case 1: //Boots
                 Calculation(ItemCost[1], ItemsToBuy, num, ItemGameObjects[1]);
-                if (ItemGameObjects[1].activeSelf)
+                break;
+            case 2: //Gloves
+                Calculation(ItemCost[2], ItemsToBuy, num, ItemGameObjects[2]);
+                if (ItemGameObjects[2].activeSelf)
                 {
-                    ItemGameObjects[2].SetActive(true);
+                    ItemGameObjects[1].SetActive(true);
                 }
                 break;
-            case 2: //jacket
-                Calculation(ItemCost[2], ItemsToBuy, num, ItemGameObjects[3]);
+            case 3: //jacket
+                Calculation(ItemCost[3], ItemsToBuy, num, ItemGameObjects[3]);
                 break;
-            case 3: //Return
+            case 4: //Return
                 PurchasePanel.SetActive(false);
                 SetUIEnabled(true);
                 MenuButtons[0].Select();
@@ -230,7 +238,7 @@ public class BlackMarketUI : MonoBehaviour
         if(price > TokenAmount)
         {
             //Debug.Log("Not enough tokens");
-            StartCoroutine(DisplayDenyPurchaseText());
+            StartCoroutine(DisplayDenyPurchaseText(0));
         }
         else
         {
@@ -268,11 +276,55 @@ public class BlackMarketUI : MonoBehaviour
         }
     }
 
-    IEnumerator DisplayDenyPurchaseText()
+    IEnumerator DisplayDenyPurchaseText(int num)
     {
+        DenyText(num, DenyPurchaseText);
         DenyPurchaseText.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
         DenyPurchaseText.gameObject.SetActive(false);
         StopAllCoroutines();
+    }
+
+    private void ReductionDetectionCalculation(int price)
+    {
+        if(price > TokenAmount) //if they have enough tokens
+        {
+            StartCoroutine(DisplayDenyPurchaseText(0));
+        }
+        else
+        {
+            if(playerUI.DetectionAmount > 0) //if the detection is greater than 0
+            {
+                //Debug.Log(playerUI.DetectionAmount.ToString());
+                StartCoroutine(DisplayDenyPurchaseText(2));
+                TokenAmount -= price;
+                playerUI.DetectionAmount--;
+            }
+            else
+            {
+                StartCoroutine(DisplayDenyPurchaseText(1));
+                //Debug.Log("Your detection is at the lowest.");
+            }
+        }
+    }
+
+    private string DenyText(int changetext, TextMeshProUGUI displaytext)
+    {
+        switch(changetext)
+        {
+            case 0:
+            default:
+                displaytext.text = "Not enough tokens...";
+                break;
+            case 1:
+                displaytext.text = "Detection is at lowest point";
+                break;
+            case 2:
+                displaytext.text = "Detection reduced by 1";
+                break;
+
+        }
+
+        return displaytext.text;
     }
 }
