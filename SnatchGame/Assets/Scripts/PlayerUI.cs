@@ -20,6 +20,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI InventoryText;
 
+    [SerializeField]
+    private TextMeshProUGUI DetectiveFollowText;
+
     /*
     [SerializeField]
     private Slider PenalitySlider;*/
@@ -36,6 +39,9 @@ public class PlayerUI : MonoBehaviour
     private PlayerController player;
 
     public bool PlayerAttention { get; private set; }
+
+    private Detective detective;
+    private bool removeText;
 
     private void OnEnable()
     {
@@ -71,15 +77,16 @@ public class PlayerUI : MonoBehaviour
         DetectionMaxValue = player.timeRemaining;
         CooldownMaxValue = player.CooldownTimer;
 
-        //PenalitySlider.value = 0;
         PlayerAttention = false;
 
         DetectionText.transform.Find("DetectionBar").GetComponent<Slider>().maxValue = DetectionMax;
         InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().maxValue = player.StolenItemsTotal;
         PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = 0;
         
-        //Physics.gravity = new Vector3(0, -70, 0);
-        //PenalitySlider.maxValue = player.timeRemaining;
+        detective = GameObject.Find("Detective").GetComponent<Detective>();
+
+        DetectiveFollowText.text = "";
+        removeText = false;
     }
 
     // Update is called once per frame
@@ -88,7 +95,7 @@ public class PlayerUI : MonoBehaviour
         if (DetectionAmount <= DetectionMax)
         {
             DetectionText.text = DetectionString();
-            
+
         }
 
         //Lose
@@ -120,14 +127,14 @@ public class PlayerUI : MonoBehaviour
                 break;
 
         }
-        
+
         InventoryText.text = InventoryString();
 
         if (PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value == 0)
         {
             PenaltyText.text = string.Empty;
         }
-        else if(player.PenaltyActive)
+        else if (player.PenaltyActive)
         {
             PenaltyText.text = "Lay low, you're being suspicious";
         }
@@ -139,6 +146,24 @@ public class PlayerUI : MonoBehaviour
         ChangeSlider();
 
         PlayerAttention = player.PenaltyActive;
+        DetectiveFollowUI();
+    }
+
+    private void DetectiveFollowUI()
+    {
+        if (detective.followPlayer && !detective.lostPlayer)
+        {
+            DetectiveFollowText.text = "You are being followed...";
+        }
+        else if (!removeText && detective.lostPlayer)
+        {
+            DetectiveFollowText.text = "You slipped away...";
+            StartCoroutine(RemoveText());
+        }
+        else if (removeText && detective.lostPlayer)
+        {
+            DetectiveFollowText.text = "";
+        }
     }
 
     private string EndingString(string condition)
@@ -173,6 +198,7 @@ public class PlayerUI : MonoBehaviour
         EndingStateText.gameObject.SetActive(condition);
         InventoryText.gameObject.SetActive(condition);
         PenaltyText.gameObject.SetActive(condition);
+        DetectiveFollowText.gameObject.SetActive(condition);
     }
 
     private void ChangeSlider()
@@ -199,6 +225,14 @@ public class PlayerUI : MonoBehaviour
 
         DetectionAmount += 2;
 
+        StopAllCoroutines();
+    }
+
+    IEnumerator RemoveText()
+    {
+        yield return new WaitForSeconds(2);
+        removeText = true;
+        //DetectiveFollowText.text = "";
         StopAllCoroutines();
     }
 }

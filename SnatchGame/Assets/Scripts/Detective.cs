@@ -7,6 +7,29 @@ public class Detective : Entity
 {
     private bool FollowPlayer;
     private bool LostPlayer;
+    
+    public bool followPlayer { 
+        get
+        {
+            return FollowPlayer;
+        }
+        private set
+        {
+            FollowPlayer = value;
+        }
+    }
+
+    public bool lostPlayer {
+        get
+        {
+            return LostPlayer;
+        }
+        private set
+        {
+            LostPlayer = value;
+        }
+    }
+
     private bool DoubleIncreasePoints;
  
     private GameObject Player;
@@ -65,6 +88,7 @@ public class Detective : Entity
 
         rig = GetComponent<Rigidbody>();
         rig.freezeRotation = true;
+
     }
 
     // Update is called once per frame
