@@ -21,6 +21,8 @@ public class PlayerArm : Player
 
     [SerializeField]
     private int rotateSpeed;
+
+    private PlayerUI playerUI;
     
     private void Awake()
     {
@@ -55,12 +57,25 @@ public class PlayerArm : Player
     {
         RotateSpeed = rotateSpeed;
         PlayerBase = GameObject.Find("BasePlayer");
+
+        if(playerUI == null)
+        {
+            playerUI = PlayerBase.GetComponent<PlayerUI>();
+        }
        
     }
     
     void FixedUpdate()
     {
-        MoveArm(); 
+        if(playerUI.playerState == PlayerState.Active)
+        {
+            MoveArm();
+        }
+        else
+        {
+            transform.localRotation = Quaternion.Euler(0, PlayerBase.transform.rotation.y, 0);
+        }
+        
     }
 
 

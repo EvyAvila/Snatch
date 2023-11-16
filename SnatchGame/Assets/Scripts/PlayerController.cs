@@ -36,6 +36,8 @@ public class PlayerController : Player
     public float DetectionMeterCount;
 
     public bool PenaltyActive { get; private set; }
+
+    private PlayerUI playerUI;
     
     private void Awake()
     {
@@ -80,6 +82,8 @@ public class PlayerController : Player
 
         fallRemaining = 3;
         fallDefault = fallRemaining;
+
+        playerUI = GetComponent<PlayerUI>();
     }
 
     void FixedUpdate()
@@ -95,7 +99,7 @@ public class PlayerController : Player
         {
             ResetRotation();
         }
-        else
+        else if(playerUI.playerState == PlayerState.Active && !Fall)
         {
             MovePlayer();
         }
