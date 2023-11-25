@@ -4,9 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using JetBrains.Annotations;
-using System.Linq;
-using Unity.VisualScripting;
 
 public class BlackMarketUI : MonoBehaviour
 {
@@ -46,8 +43,11 @@ public class BlackMarketUI : MonoBehaviour
     private GameManager gm;
 
     private PlayerUI playerUI;
-
+    
+    //[SerializeField]
+    //private TextMeshProUGUI PurchaseDescriptionText;
     //private bool SetButtonSelection;
+    
 
     #endregion
     private void OnEnable()
@@ -96,6 +96,12 @@ public class BlackMarketUI : MonoBehaviour
         playerUI = GetComponent<PlayerUI>();
 
         DenyText(0, DenyPurchaseText);
+
+        //PurchaseDescriptionText.text = string.Empty;
+
+        
+
+       
     }
 
     void Update()
@@ -119,7 +125,7 @@ public class BlackMarketUI : MonoBehaviour
     
     private string TokenString()
     {
-        return "Token Amount: " + TokenAmount;
+        return "Tokens: " + TokenAmount;
     }
 
     private void Menu(int num)
@@ -148,10 +154,6 @@ public class BlackMarketUI : MonoBehaviour
             player.StolenItems.RemoveAt(0);
         }
     }
-    /*private void UpgradeButtonAction()
-    {
-        Debug.Log("Upgrade button clicked");
-    }*/
     private void PurchaseAction() 
     {
         PurchasePanel.SetActive(true);
@@ -184,6 +186,7 @@ public class BlackMarketUI : MonoBehaviour
         TitleText.gameObject.SetActive(condition);
         TokenText.gameObject.SetActive(condition);
         DenyPurchaseText.gameObject.SetActive(condition);
+        //PurchaseDescriptionText.gameObject.SetActive(condition);
 
         foreach(var v in ItemsToBuy)
         {
@@ -201,25 +204,27 @@ public class BlackMarketUI : MonoBehaviour
     
     private void BuyingSection()
     {
-        ItemsToBuy[ItemsToBuy.Length - 1].Select();
+        //ItemsToBuy[ItemsToBuy.Length - 1].Select();
+        ItemsToBuy[0].Select();
     }
 
     private void Items(int num)
     {
+        //DisplayPurchaseDescription(num);
+        
        switch(num)
        {
             case 0:
                 ReductionDetectionCalculation(ItemCost[0]);
                 break;
-
             case 1: //Boots
-                Calculation(ItemCost[1], ItemsToBuy, num, ItemGameObjects[1]);
+                Calculation(ItemCost[1], ItemsToBuy, num, ItemGameObjects[0]);
                 break;
             case 2: //Gloves
-                Calculation(ItemCost[2], ItemsToBuy, num, ItemGameObjects[2]);
-                if (ItemGameObjects[2].activeSelf)
+                Calculation(ItemCost[2], ItemsToBuy, num, ItemGameObjects[1]);
+                if (ItemGameObjects[1].activeSelf)
                 {
-                    ItemGameObjects[1].SetActive(true);
+                    ItemGameObjects[2].SetActive(true);
                 }
                 break;
             case 3: //jacket
