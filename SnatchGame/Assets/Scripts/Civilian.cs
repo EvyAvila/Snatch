@@ -38,6 +38,9 @@ public class Civilian : Entity
 
     private Rigidbody rig;
 
+    [SerializeField]
+    private float XPosition;
+
     void Start()
     {
         timeRemaining = 5;
@@ -62,6 +65,8 @@ public class Civilian : Entity
 
         rig = GetComponent<Rigidbody>();
         rig.freezeRotation = true;
+
+        XPosition = transform.localEulerAngles.x;
     }
 
     void FixedUpdate()
@@ -216,7 +221,8 @@ public class Civilian : Entity
         }
         else
         {
-            this.transform.rotation = new Quaternion(0,0,0,0);
+            //this.transform.rotation = new Quaternion(XPosition,0,0,0);
+            this.transform.rotation = Quaternion.Euler(XPosition, 0, 0);
             Fall = false;
             timeRemaining = timeDefault;
             directionState = originalState;
