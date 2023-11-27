@@ -8,13 +8,15 @@ using UnityEngine.EventSystems;
 public class PointerClass : MonoBehaviour, ISelectHandler
 {
     //Based from https://discussions.unity.com/t/checking-if-button-is-highlighted-with-a-controller-no-mouse/223282/2
+    [SerializeField]
     private TextMeshProUGUI PurchaseDescriptionText;
 
-    private void Start()
+    private void Awake()
     {
         if(PurchaseDescriptionText == null)
         {
             PurchaseDescriptionText = GameObject.Find("PurchaseDescription").GetComponent<TextMeshProUGUI>();
+           
         }
     }
 
