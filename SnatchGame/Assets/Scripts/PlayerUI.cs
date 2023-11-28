@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -42,6 +43,8 @@ public class PlayerUI : MonoBehaviour
 
     private Detective detective;
     private bool removeText;
+
+    //private TestAudio testAudio;
 
     private void OnEnable()
     {
@@ -87,11 +90,14 @@ public class PlayerUI : MonoBehaviour
 
         DetectiveFollowText.text = "";
         removeText = false;
+
+        //testAudio = GameObject.Find("MainGame").GetComponent<TestAudio>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        //testAudio.GamePlayMusic();
         if (DetectionAmount <= DetectionMax)
         {
             DetectionText.text = DetectionString();

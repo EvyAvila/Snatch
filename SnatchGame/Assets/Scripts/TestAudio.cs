@@ -17,12 +17,10 @@ public class TestAudio : MonoBehaviour
 
     private PlayerUI player;
 
-
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
-
+        
         this.Source.clip = Clips[0];
         this.Source.name = Clips[0].name;
         switch (keyPlayMode)
@@ -39,6 +37,8 @@ public class TestAudio : MonoBehaviour
 
     void Awake()
     {
+        player = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
+
         this.Source = this.gameObject.AddComponent<AudioSource>();
         if (this.keyPriority == KeyPriority.High)
         {
@@ -57,55 +57,43 @@ public class TestAudio : MonoBehaviour
 
     private void Update()
     {
+        
         switch(screen)
         {
             case Screen.Menu:
                // break;
             case Screen.Game:
-                /*if (keyPlayMode == KeyPlayMode.LoopOnKey && player.playerState == PlayerState.Active)
-                {
-                    Source.loop = true;
-                    Source.clip = Clips[0];
-                    Source.name = Clips[0].name;
-                    if (Input.GetKeyDown(Key))
-                    {
-                        if (isPaused)
-                        {
-                            Source.UnPause();
-                            this.isPaused = false;
-                        }
-                        else
-                            Source.Play();
-                    }
-                }*/
                 if(keyPlayMode == KeyPlayMode.LoopOnStart && player.playerState == PlayerState.Active)
                 {
                     if(Source.clip != Clips[0])
                     {
                         Source.clip = Clips[0];
-                        Source.name = Clips[0].name;
+                        //Source.name = Clips[0].name;
                         Source.Play();
                        
                     }
                     
                 }
-                else if (player.playerState == PlayerState.Win)
+                else
                 {
                     Source.Stop();
-                    
-                    this.Source.clip = Clips[2];
-                    this.Source.name = Clips[2].name;
-                    screen = Screen.Won;
+                    if (player.playerState == PlayerState.Win)
+                    {
 
+                        this.Source.clip = Clips[2];
+                        //this.Source.name = Clips[2].name;
+                        screen = Screen.Won;
+
+                    }
+                    else if (player.playerState == PlayerState.Lose)
+                    {
+
+                        this.Source.clip = Clips[1];
+                        //this.Source.name = Clips[1].name;
+                        screen = Screen.Loss;
+                    }
                 }
-                else if (player.playerState == PlayerState.Lose)
-                {
-                    Source.Stop();
-                   
-                    this.Source.clip = Clips[1];
-                    this.Source.name = Clips[1].name;
-                    screen = Screen.Loss;
-                }
+                
                 break;
             case Screen.Won:
                 Source.PlayOneShot(Clips[2]);
@@ -120,5 +108,14 @@ public class TestAudio : MonoBehaviour
                 break;
 
         }
+        
     }
+    
+    public void StealObjectSound()
+    {
+        //Source.clip = Clips[6];
+        //Source.name = Clips[6].name;
+        Source.PlayOneShot(Clips[6]);
+    }
+
 }
