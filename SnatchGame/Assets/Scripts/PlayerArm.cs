@@ -20,7 +20,7 @@ public class PlayerArm : Player
     private GameObject PlayerBase;
 
     [SerializeField]
-    private int rotateSpeed;
+    private int rs;
 
     private PlayerUI playerUI;
     
@@ -55,7 +55,7 @@ public class PlayerArm : Player
 
     void Start()
     {
-        RotateSpeed = rotateSpeed;
+        RotateSpeed = rs;
         PlayerBase = GameObject.Find("BasePlayer");
 
         if(playerUI == null)
@@ -84,12 +84,12 @@ public class PlayerArm : Player
         var value = armAction.ReadValue<Vector3>();
 
         //Debug.Log(value);
-        Direction.z = -value.x; //left and right
-        Direction.x = -value.y; //forward and backward
+        Direction.z = -value.y; //forward and back
+        Direction.x = value.x; //left and right
 
         if (Direction.x != 0 || Direction.z != 0)
         {
-            transform.Rotate(-Direction * RotateSpeed * Time.deltaTime);
+            transform.Rotate(Direction * RotateSpeed * Time.deltaTime);
             //transform.eulerAngles += -Direction * RotateSpeed * Time.deltaTime;
         }
         else
@@ -97,7 +97,5 @@ public class PlayerArm : Player
             transform.localRotation = Quaternion.Euler(0, PlayerBase.transform.rotation.y, 0);
         }        
         
-    }
-
-    
+    }   
 }

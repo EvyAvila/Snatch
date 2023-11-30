@@ -18,6 +18,9 @@ public class BlackMarketUI : MonoBehaviour
     private int TokenAmount;
 
     private PlayerController player;
+    
+    [SerializeField]
+    private PlayerArm[] arms;
     //private Detective detective;
 
     [SerializeField]
@@ -66,7 +69,7 @@ public class BlackMarketUI : MonoBehaviour
         player = GetComponent<PlayerController>();        
         //detective= GameObject.Find("Detective").GetComponent<Detective>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
+
         for(int i = 0; i < MenuButtons.Length; i++)
         {
             int buttonNum = i;
@@ -266,18 +269,15 @@ public class BlackMarketUI : MonoBehaviour
         }
         else if(item.CompareTag("Jacket"))
         {
-            //lower timer of detective following player
-            //detective.timeRemaining = detective.timeRemaining / 2;
             player.StolenItemsTotal = player.GetTotal; 
         }
         else if(item.CompareTag("Gloves"))
         {
             //increase speed of arm movement
-            float armRotateSpeed = player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed;
-           
-            //Is there another way to do this? 
-            player.gameObject.transform.Find("RightArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
-            player.gameObject.transform.Find("LeftArm").GetComponent<PlayerArm>().RotateSpeed = armRotateSpeed + 15;
+            foreach(var v in arms)
+            {
+                v.RotateSpeed += 15;
+            }
         }
     }
 
