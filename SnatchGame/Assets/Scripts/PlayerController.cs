@@ -14,6 +14,8 @@ public class PlayerController : Player
     public int StolenItemsTotal { get; set; }
     public int GetTotal { get; set; }
 
+    //public Animator PlayerAnimation;
+
     [SerializeField]
     private int speed;
     [SerializeField]
@@ -84,6 +86,8 @@ public class PlayerController : Player
         fallDefault = fallRemaining;
 
         playerUI = GetComponent<PlayerUI>();
+
+        //PlayerAnimation = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -94,13 +98,16 @@ public class PlayerController : Player
            
             //this.transform.position += Vector3.down * 2 * Time.deltaTime;
         }*/
-        
-        if(Fall)
+        //PlayerAnimation.SetFloat("Speed", Speed);
+        //PlayerAnimation.SetBool("Fallen", Fall);
+
+        if (Fall)
         {
             ResetRotation();
         }
         else if(playerUI.playerState == PlayerState.Active && !Fall)
         {
+            
             MovePlayer();
         }
 
