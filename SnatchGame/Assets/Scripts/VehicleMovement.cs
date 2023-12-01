@@ -4,7 +4,7 @@ using UnityEngine;
 
 enum TurnState { Left, Right }
 
-public class VehicleMovement : MonoBehaviour
+public class VehicleMovement : MonoBehaviour, IDetectionCount
 {
     [SerializeField]
     private TurnState turnState;
@@ -19,11 +19,14 @@ public class VehicleMovement : MonoBehaviour
     int turnDegree;
 
     private PlayerUI playerUI;
+    public Audio GameAudio;
     //private PlayerController player;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameAudio = GameObject.Find("Detection").GetComponent<Audio>();
+
         Direction.y = direction;
         
         SetTurn();
@@ -75,13 +78,17 @@ public class VehicleMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            StartCoroutine(DetectionIncrease());
+            StartCoroutine(DetectionIncrease(1));
         }
     }
 
-    IEnumerator DetectionIncrease()
+    public IEnumerator DetectionIncrease(float waitForTimer)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(waitForTimer);
+        if (!GameAudio.audioName.isPlaying)
+        {
+            GameAudio.PlayStart();
+        }
         playerUI.DetectionAmount += 4;
               
         StopAllCoroutines();

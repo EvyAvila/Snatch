@@ -22,14 +22,12 @@ public class PlayerHand : Player
 
     private PlayerController player;
 
-    private TestAudio audioActive;
+    public Audio GameAudio;
+
     private void Awake()
     {
         armControl = new PlayerControl();
-        if (audioActive == null)
-        {
-            audioActive = GameObject.Find("MainGame").GetComponent<TestAudio>();
-        }
+        
     }
 
     private void OnEnable()
@@ -96,7 +94,7 @@ public class PlayerHand : Player
         if (other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
             //Debug.Log(arm.ToString() + " hand is grabbing the item");
-            audioActive.StealObjectSound();
+            
             AddToInventory(other);
         }
     }
@@ -118,5 +116,11 @@ public class PlayerHand : Player
         player.StolenItems.Add(stolenItem.GetComponent<ExpensiveObject>());
 
         stolenItem.SetActive(false);
+
+        if (!GameAudio.audioName.isPlaying)
+        {
+            GameAudio.PlayStart();
+        }
+           
     }
 }

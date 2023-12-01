@@ -1,121 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-//Not my code - Jeff Meyers
-public enum KeyPlayMode { PlayOnKey, PlayOneShotOnKey, LoopOnKey, PlayOnStart, PlayOnAwake, LoopOnStart, LoopOnAwake }
-public enum KeyPriority { Normal, High, HighWithSkip }
-
-public enum Screen { Menu, Game, Loss, Won }
-
 public class Audio : MonoBehaviour
 {
-    public AudioClip Clip;
-    public AudioSource Source;
-    public KeyCode Key;
+    [SerializeField]
+    public AudioSource audioName { get; private set; }
 
-    public KeyPlayMode keyPlayMode;
-    public KeyPriority keyPriority;
+    [SerializeField]
+    float volume;
 
-    public Screen screen;
+    [SerializeField]
+    bool loop;
 
-    private bool isPaused;
-
-    private PlayerUI player;
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        player = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
-
-        this.Source.clip = Clip;
-        this.Source.name = Clip.name;
-        switch (keyPlayMode)
-        {
-            case KeyPlayMode.PlayOnStart:
-                Source.PlayOneShot(Clip);
-                break;
-            case KeyPlayMode.LoopOnStart:
-                Source.loop = true;
-                Source.Play();
-                break;
-        }
+        this.audioName = this.gameObject.GetComponent<AudioSource>();
     }
 
-    void Awake()
+    private void Start()
     {
-        this.Source = this.gameObject.AddComponent<AudioSource>();
-        if (this.keyPriority == KeyPriority.High)
-        {
-            this.Source.priority = 1;
-
-        }
-        if (this.keyPriority == KeyPriority.HighWithSkip)
-        {
-            this.Source.priority = 1;
-            this.Source.bypassEffects = true;
-            this.Source.bypassListenerEffects = true;
-            this.Source.bypassReverbZones = true;
-        }
-
+        this.audioName.volume = volume;
+        this.audioName.loop = loop;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayAudio()
     {
-        switch (screen)
-        {
-            case Screen.Game:
-            case Screen.Menu:
-
-                if (keyPlayMode == KeyPlayMode.LoopOnKey && player.playerState == PlayerState.Active)
-                {
-                    Source.loop = true;
-                    Source.clip = Clip;
-                    if (Input.GetKeyDown(Key))
-                    {
-                        if (isPaused)
-                        {
-                            Source.UnPause();
-                            this.isPaused = false;
-                        }
-                        else
-                            Source.Play();
-                    }
-                }
-                else if (player.playerState == PlayerState.Win || player.playerState == PlayerState.Lose)
-                {
-                    Source.Stop();
-                }
-
-                break;
-            case Screen.Loss:
-                if (player.playerState == PlayerState.Lose && keyPlayMode == KeyPlayMode.PlayOnKey)
-                {
-                   
-                    //Source.Play();
-                }
-                keyPlayMode = KeyPlayMode.PlayOnStart;
-
-                break;
-
-            case Screen.Won:
-                if (player.playerState == PlayerState.Win)
-                {
-                    keyPlayMode = KeyPlayMode.PlayOnStart;
-                }
-               
-
-                break;
-            
-        }
-
-
-
+        this.audioName.Play();
     }
+
+    public void StopAudio()
+    {
+        this.audioName.Stop();
+    }
+
+    public void PlayStart()
+    {
+        this.audioName.PlayOneShot(this.audioName.clip);
+    }
+
 }
 
 

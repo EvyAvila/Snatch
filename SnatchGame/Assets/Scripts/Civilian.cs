@@ -8,7 +8,7 @@ using UnityEngine.Analytics;
 
 enum DirectionState { North, South, East, West, Idle, Fall }
 
-public class Civilian : Entity
+public class Civilian : Entity, IDetectionCount
 {
     [SerializeField]
     private DirectionState directionState;
@@ -41,8 +41,15 @@ public class Civilian : Entity
     [SerializeField]
     private float XPosition;
 
+    public Audio[] GameAudio;
+
     void Start()
     {
+        GameAudio = new Audio[2];
+
+        GameAudio[0] = GameObject.Find("Detection").GetComponent<Audio>();
+        GameAudio[1] = GameObject.Find("Bump").GetComponent<Audio>();
+
         timeRemaining = 5;
         timeDefault = timeRemaining;
 
@@ -161,6 +168,7 @@ public class Civilian : Entity
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            GameAudio[1].PlayStart();
             DetectionActive(1);
         }
     }
@@ -199,9 +207,14 @@ public class Civilian : Entity
         }
     }
 
-    IEnumerator DetectionIncrease(float waitTime)
+    public IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+        if (!GameAudio[0].audioName.isPlaying)
+        {
+            GameAudio[0].PlayStart();
+        }
+       
         playerUI.DetectionAmount++;
         StopAllCoroutines();
     }

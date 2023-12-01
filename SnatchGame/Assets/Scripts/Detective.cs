@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Detective : Entity
+public class Detective : Entity, IDetectionCount
 {
     private bool FollowPlayer;
     private bool LostPlayer;
@@ -59,9 +59,13 @@ public class Detective : Entity
 
     private Rigidbody rig;
 
+    public Audio GameAudio;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameAudio = GameObject.Find("Detection").GetComponent<Audio>();
+
         FollowPlayer = false;
         LostPlayer = false; 
         Player = GameObject.Find("BasePlayer");
@@ -159,10 +163,13 @@ public class Detective : Entity
         StopAllCoroutines();
     }
 
-    IEnumerator DetectionIncrease(float waitTime)
+    public IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-
+        if (!GameAudio.audioName.isPlaying)
+        {
+            GameAudio.PlayStart();
+        }
         playerUI.DetectionAmount++;
 
         StopAllCoroutines();

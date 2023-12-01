@@ -46,6 +46,8 @@ public class BlackMarketUI : MonoBehaviour
     private GameManager gm;
 
     private PlayerUI playerUI;
+
+    public Audio GameAudio;
     
     //[SerializeField]
     //private TextMeshProUGUI PurchaseDescriptionText;
@@ -65,6 +67,8 @@ public class BlackMarketUI : MonoBehaviour
 
     void Start()
     {
+        GameAudio = GameObject.Find("ExchangeItems").GetComponent<Audio>();
+
         //SetButtonSelection = true;
         player = GetComponent<PlayerController>();        
         //detective= GameObject.Find("Detective").GetComponent<Detective>();
@@ -155,6 +159,9 @@ public class BlackMarketUI : MonoBehaviour
             TokenAmount += (int)Mathf.Round((int)player.StolenItems[0].Value / 10);
 
             player.StolenItems.RemoveAt(0);
+
+            GameAudio.PlayStart();
+            
         }
     }
     private void PurchaseAction() 
@@ -168,6 +175,8 @@ public class BlackMarketUI : MonoBehaviour
     private void ExitAction()
     {
         player.GetComponent<PlayerUI>().playerState = PlayerState.Active;
+
+        playerUI.GameAudio[0].PlayAudio();
 
         int random = Random.Range(0, ReturnPosition.Length);
 

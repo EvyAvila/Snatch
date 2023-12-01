@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public enum PlayerState { Lose, Win, Active, Market} //Active means the player is playing in game
 
-public class PlayerUI : MonoBehaviour
+public class PlayerUI : MonoBehaviour, IDetectionCount
 {
     public PlayerState playerState;
 
@@ -23,10 +23,6 @@ public class PlayerUI : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI DetectiveFollowText;
-
-    /*
-    [SerializeField]
-    private Slider PenalitySlider;*/
 
     [SerializeField]
     private TextMeshProUGUI PenaltyText;
@@ -44,7 +40,8 @@ public class PlayerUI : MonoBehaviour
     private Detective detective;
     private bool removeText;
 
-    //private TestAudio testAudio;
+
+    public Audio[] GameAudio;
 
     private void OnEnable()
     {
@@ -91,7 +88,7 @@ public class PlayerUI : MonoBehaviour
         DetectiveFollowText.text = "";
         removeText = false;
 
-        //testAudio = GameObject.Find("MainGame").GetComponent<TestAudio>();
+        GameAudio[0].PlayAudio();
     }
 
     // Update is called once per frame
@@ -109,6 +106,8 @@ public class PlayerUI : MonoBehaviour
         {
             //EndingStateText.text = EndingString("Lose");
             playerState = PlayerState.Lose;
+            GameAudio[0].StopAudio();
+           
             //Time.timeScale = 0;
         }
 
@@ -117,18 +116,30 @@ public class PlayerUI : MonoBehaviour
         {
             //EndingStateText.text = EndingString("Completed the level");
             playerState = PlayerState.Win;
+            GameAudio[0].StopAudio();
 
         }
 
         switch (playerState)
         {
             case PlayerState.Lose:
+
+                if(!GameAudio[1].audioName.isPlaying) //checking isPlaying help from https://stackoverflow.com/questions/49451295/audio-not-playing-in-unity
+                {
+                    GameAudio[1].PlayAudio();
+                }
+                
                 EndingStateText.text = EndingString("Lose \nPress any button to restart game.");
                 break;
             case PlayerState.Active:
+                
                 EndingStateText.text = string.Empty;
                 break;
             case PlayerState.Win:
+                if (!GameAudio[2].audioName.isPlaying)
+                {
+                    GameAudio[2].PlayAudio();
+                }
                 EndingStateText.text = EndingString("Completed the level");
                 break;
 
@@ -225,10 +236,13 @@ public class PlayerUI : MonoBehaviour
         } 
     }
 
-    IEnumerator DetectionIncrease(float waitTime)
+    public IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-
+        if (!GameAudio[3].audioName.isPlaying)
+        {
+            GameAudio[3].PlayAudio();
+        }
         DetectionAmount += 2;
 
         StopAllCoroutines();
@@ -241,4 +255,12 @@ public class PlayerUI : MonoBehaviour
         //DetectiveFollowText.text = "";
         StopAllCoroutines();
     }
+
+    
+}
+
+public interface IDetectionCount
+{
+    IEnumerator DetectionIncrease(float waitTime);
+    
 }
