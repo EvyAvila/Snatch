@@ -39,7 +39,10 @@ public class PlayerController : Player
     public bool PenaltyActive { get; private set; }
 
     private PlayerUI playerUI;
-    
+
+    private float reductionSpeedTime;
+    private float reductionSpeedDefault;
+
     private void Awake()
     {
         controls = new PlayerControl(); 
@@ -86,6 +89,9 @@ public class PlayerController : Player
 
         playerUI = GetComponent<PlayerUI>();
 
+        reductionSpeedTime = 5;
+        reductionSpeedDefault = reductionSpeedTime;
+
         //PlayerAnimation = GetComponent<Animator>();
     }
 
@@ -110,7 +116,10 @@ public class PlayerController : Player
             MovePlayer();
         }
 
-       
+        if(Speed != speed)
+        {
+            ResetSpeed();
+        }
 
     }
 
@@ -206,9 +215,6 @@ public class PlayerController : Player
         
         if (collision.gameObject.CompareTag("Vehicle"))
         {
-            //this.transform.position += Vector3.back * 15;
-           
-
             FallAction();
         }
        
@@ -230,10 +236,7 @@ public class PlayerController : Player
 
         rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
         this.transform.position += Vector3.up * 15 * Time.deltaTime;
-
-        
-
-        this.transform.Rotate(0,0, -135 * 4 * Time.deltaTime);
+        this.transform.Rotate(0,0, -180 * 4 * Time.deltaTime);
     }
 
     private void ResetRotation()
@@ -249,6 +252,23 @@ public class PlayerController : Player
             fallRemaining = fallDefault;
            
             rig.freezeRotation = true;
+        }
+    }
+
+   
+
+    public void ResetSpeed()
+    {
+        if (reductionSpeedTime > 0)
+        {
+            Debug.Log("Speed Cooldown");
+            reductionSpeedTime -= Time.deltaTime;
+        }
+        else
+        {
+            Speed = speed;
+            reductionSpeedTime = reductionSpeedDefault;
+            Debug.Log("Player speed back to normal");
         }
     }
 

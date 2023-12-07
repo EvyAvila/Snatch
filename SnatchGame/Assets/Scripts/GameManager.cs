@@ -18,14 +18,19 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject NPCCollection;
 
-    [SerializeField]
-    private GameObject NPCPositions;
+    //[SerializeField]
+    //private GameObject NPCPositions;
     
     [SerializeField]
     private GameObject Detective;
 
+    [SerializeField]
+    private GameObject AnimalCollection;
+
+    AnimalInteraction[] AnimalSet;
     //Rating system
-    
+
+
 
     void Start()
     {
@@ -34,7 +39,9 @@ public class GameManager : MonoBehaviour
         ChangePosition.localRotation = Player.transform.localRotation;
         bmStatus.enabled = false;
         playerStatus.enabled = true;
-        
+
+        AnimalSet = AnimalCollection.GetComponentsInChildren<AnimalInteraction>();
+        //AnimalSet = transform.Find(tag).GetComponent<AnimalInteraction>();
     }
 
     // Update is called once per frame
@@ -94,6 +101,7 @@ public class GameManager : MonoBehaviour
         //NPCCollection.GetComponentInChildren<GameObject>().SetActive(condition);
         NPCCollection.SetActive(condition);
         Detective.SetActive(condition);
+        //AnimalCollection.SetActive(condition);
         
     }
  
@@ -103,39 +111,16 @@ public class GameManager : MonoBehaviour
         Detective.SetActive(true);
         
         Civilian[] NPCSet = NPCCollection.GetComponentsInChildren<Civilian>();
-        //Transform[] NPCPos = NPCPositions.GetComponentsInChildren<Transform>();
-
+        
         for (int i = 0; i < NPCSet.Length; i++)
         {
-            //GameObject npc = NPCSet[i].gameObject;
-            //npc.transform.Find("Object").gameObject.SetActive(true);
+            
             if (!NPCSet[i].transform.Find("Object").gameObject.activeSelf)
             {
                 ResetGame(NPCSet[i].gameObject);
-                
-                //NPCSet[i].transform.Find("Object").gameObject.SetActive(true);
-                //NPCSet[i].transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
-                
             }
             
         }
-
-        /*
-        Transform[] npcPos = NPCCollection.GetComponentsInChildren<Transform>();
-
-        for(int i = 1; i < npcPos.Length; i++)
-        {
-           for(int j = 2; j < NPCPos.Length; j++)
-           {
-                npcPos[j].localPosition = NPCPos[j].localPosition;
-           }
-            
-            
-        }*/
-
-        
-        //Detective.transform.Find("Object").gameObject.SetActive(true);
-        //Detective.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
         ResetGame(Detective);
         
         Detective.transform.localPosition = Detective.GetComponent<Detective>().detectivePosition.localPosition;
@@ -146,6 +131,15 @@ public class GameManager : MonoBehaviour
     {
         obj.transform.Find("Object").gameObject.SetActive(true);
         obj.transform.Find("Object").GetComponent<ExpensiveObject>().SetObject();
+    }
+
+    public void ResetAnimals()
+    {
+        foreach(var v in AnimalSet)
+        {
+            v.DisplayVisable();
+           
+        }
     }
 
     private void ReturnToMenu()

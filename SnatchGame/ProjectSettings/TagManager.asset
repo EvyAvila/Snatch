@@ -15,6 +15,7 @@ TagManager:
   - Vehicle
   - Ground
   - Audio
+  - Animal
   layers:
   - Default
   - TransparentFX

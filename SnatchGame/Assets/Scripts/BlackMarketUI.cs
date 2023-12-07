@@ -183,6 +183,7 @@ public class BlackMarketUI : MonoBehaviour
         player.gameObject.transform.position = ReturnPosition[random].position;
 
         gm.ResetObjects();
+        gm.ResetAnimals();
 
         MenuButtons[0].Select();
     }
