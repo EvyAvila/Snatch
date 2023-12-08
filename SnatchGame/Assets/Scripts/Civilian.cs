@@ -43,6 +43,8 @@ public class Civilian : Entity, IDetectionCount
 
     public Audio[] GameAudio;
 
+    private Animator CivilianAimation;
+
     void Start()
     {
         GameAudio = new Audio[2];
@@ -74,10 +76,15 @@ public class Civilian : Entity, IDetectionCount
         rig.freezeRotation = true;
 
         XPosition = transform.localEulerAngles.x;
+
+        CivilianAimation = GetComponent<Animator>();    
     }
 
     void FixedUpdate()
     {
+        CivilianAimation.SetFloat("Speed", Speed);
+        CivilianAimation.SetBool("Fall", Fall);
+
         MoveAround();
 
         if(directionState == DirectionState.Fall && Fall) //if state is fall and fall is true
@@ -193,10 +200,10 @@ public class Civilian : Entity, IDetectionCount
     {
         Fall = true;
         directionState = DirectionState.Fall;
+        Speed = 0;
+        //rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
 
-        rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
-
-        this.transform.Rotate(90 * 0.5f * Time.deltaTime, 0, 0);
+        //this.transform.Rotate(90 * 0.5f * Time.deltaTime, 0, 0);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -235,7 +242,8 @@ public class Civilian : Entity, IDetectionCount
         else
         {
             //this.transform.rotation = new Quaternion(XPosition,0,0,0);
-            this.transform.rotation = Quaternion.Euler(XPosition, 0, 0);
+            //this.transform.rotation = Quaternion.Euler(XPosition, 0, 0);
+            Speed = walkingSpeed;
             Fall = false;
             timeRemaining = timeDefault;
             directionState = originalState;
