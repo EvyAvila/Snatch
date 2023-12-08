@@ -19,13 +19,16 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
     int turnDegree;
 
     private PlayerUI playerUI;
-    public Audio GameAudio;
-    //private PlayerController player;
-
+    
+    public Audio[] GameAudio;
+    
     // Start is called before the first frame update
     void Start()
     {
-        GameAudio = GameObject.Find("Detection").GetComponent<Audio>();
+        GameAudio = new Audio[2];
+
+        GameAudio[0] = GameObject.Find("Detection").GetComponent<Audio>();
+        GameAudio[1] = GameObject.Find("RanOverbyVehicle").GetComponent<Audio>();
 
         Direction.y = direction;
         
@@ -35,11 +38,7 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
         {
             playerUI = GameObject.Find("BasePlayer").GetComponent<PlayerUI>();
         }
-        /*
-        if(player == null)
-        {
-            player = GameObject.Find("BasePlayer").GetComponent<PlayerController>();
-        }*/
+       
     }
 
     // Update is called once per frame
@@ -53,11 +52,9 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
         switch (turnState)
         {
             case TurnState.Left:
-                //Direction = Vector3.down;
                 turnDegree = -90;
                 break;
             case TurnState.Right:
-                //Direction = Vector3.up;
                 turnDegree = 90;
                 break;
         }
@@ -78,6 +75,7 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            GameAudio[1].PlayStart();
             StartCoroutine(DetectionIncrease(1));
         }
     }
@@ -85,9 +83,9 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
     public IEnumerator DetectionIncrease(float waitForTimer)
     {
         yield return new WaitForSeconds(waitForTimer);
-        if (!GameAudio.audioName.isPlaying)
+        if (!GameAudio[0].audioName.isPlaying)
         {
-            GameAudio.PlayStart();
+            GameAudio[0].PlayStart();
         }
         playerUI.DetectionAmount += 4;
               

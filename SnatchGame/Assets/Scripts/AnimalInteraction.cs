@@ -8,6 +8,8 @@ public class AnimalInteraction : MonoBehaviour
 {
     private PlayerController player;
 
+    private Audio GameAudio;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,11 @@ public class AnimalInteraction : MonoBehaviour
         {
             player = GameObject.Find("BasePlayer").GetComponent<PlayerController>();
       
+        }
+
+        if(GameAudio == null)
+        {
+            GameAudio = GameObject.Find("AnimalInteraction").GetComponent<Audio>();
         }
     }
 
@@ -29,6 +36,7 @@ public class AnimalInteraction : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             Debug.Log("*Animal sound");
+            GameAudio.PlayAudio();
         }
     }
 
@@ -36,7 +44,7 @@ public class AnimalInteraction : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("*Animal stops sound");
+            GameAudio.StopAudio();
         }
     }
 
@@ -44,7 +52,6 @@ public class AnimalInteraction : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            //Debug.Log("Play is touching the animal");
             AttackPlayer();
         }
     }
@@ -54,15 +61,13 @@ public class AnimalInteraction : MonoBehaviour
         if(player.StolenItems.Count > 0)
         {
             player.StolenItems.RemoveAt(0);
-            Debug.Log("Player loses a stolen item");
         }
         else
         {
             player.Speed = player.Speed / 2;
-            Debug.Log("Player speed was reduced");
-            
         }
 
+        GameAudio.StopAudio();
         this.gameObject.SetActive(false);
     }
 

@@ -47,7 +47,7 @@ public class BlackMarketUI : MonoBehaviour
 
     private PlayerUI playerUI;
 
-    public Audio GameAudio;
+    public Audio[] GameAudio;
     
     //[SerializeField]
     //private TextMeshProUGUI PurchaseDescriptionText;
@@ -67,7 +67,11 @@ public class BlackMarketUI : MonoBehaviour
 
     void Start()
     {
-        GameAudio = GameObject.Find("ExchangeItems").GetComponent<Audio>();
+        GameAudio = new Audio[3];
+
+        GameAudio[0] = GameObject.Find("ExchangeItems").GetComponent<Audio>();
+        GameAudio[1] = GameObject.Find("Purchasetem").GetComponent<Audio>();
+        GameAudio[2] = GameObject.Find("SelectButton").GetComponent<Audio>();
 
         //SetButtonSelection = true;
         player = GetComponent<PlayerController>();        
@@ -103,12 +107,6 @@ public class BlackMarketUI : MonoBehaviour
         playerUI = GetComponent<PlayerUI>();
 
         DenyText(0, DenyPurchaseText);
-
-        //PurchaseDescriptionText.text = string.Empty;
-
-        
-
-       
     }
 
     void Update()
@@ -160,12 +158,17 @@ public class BlackMarketUI : MonoBehaviour
 
             player.StolenItems.RemoveAt(0);
 
-            GameAudio.PlayStart();
+            DefaultAudioPitch(0);
             
+        }
+        else
+        {
+            AlterAudioPitch(0, 0.5f);
         }
     }
     private void PurchaseAction() 
     {
+        GameAudio[2].PlayStart();
         PurchasePanel.SetActive(true);
         DenyPurchaseText.gameObject.SetActive(false);
         SetUIEnabled(false);
@@ -174,6 +177,7 @@ public class BlackMarketUI : MonoBehaviour
     }
     private void ExitAction()
     {
+        GameAudio[2].PlayStart();
         player.GetComponent<PlayerUI>().playerState = PlayerState.Active;
 
         playerUI.GameAudio[0].PlayAudio();
@@ -222,9 +226,7 @@ public class BlackMarketUI : MonoBehaviour
     }
 
     private void Items(int num)
-    {
-        //DisplayPurchaseDescription(num);
-        
+    { 
        switch(num)
        {
             case 0:
@@ -244,6 +246,7 @@ public class BlackMarketUI : MonoBehaviour
                 Calculation(ItemCost[3], ItemsToBuy, num, ItemGameObjects[3]);
                 break;
             case 4: //Return
+                GameAudio[2].PlayStart();
                 PurchasePanel.SetActive(false);
                 SetUIEnabled(true);
                 MenuButtons[0].Select();
@@ -257,9 +260,12 @@ public class BlackMarketUI : MonoBehaviour
         {
             //Debug.Log("Not enough tokens");
             StartCoroutine(DisplayDenyPurchaseText(0));
+            AlterAudioPitch(1, 0.5f);
         }
         else
         {
+            DefaultAudioPitch(1);
+
             TokenAmount -= price;
             b[position].enabled = false;
             ItemsToBuy[ItemsToBuy.Length - 1].Select();
@@ -305,22 +311,37 @@ public class BlackMarketUI : MonoBehaviour
         if(price > TokenAmount) //if they have enough tokens
         {
             StartCoroutine(DisplayDenyPurchaseText(0));
+            AlterAudioPitch(1, 0.5f);
         }
         else
         {
             if(playerUI.DetectionAmount > 0) //if the detection is greater than 0
             {
                 //Debug.Log(playerUI.DetectionAmount.ToString());
+                DefaultAudioPitch(1);
                 StartCoroutine(DisplayDenyPurchaseText(2));
                 TokenAmount -= price;
                 playerUI.DetectionAmount--;
             }
             else
             {
+                AlterAudioPitch(1, 0.5f);
                 StartCoroutine(DisplayDenyPurchaseText(1));
                 //Debug.Log("Your detection is at the lowest.");
             }
         }
+    }
+
+    private void DefaultAudioPitch(int position)
+    {
+        GameAudio[position].NormalPitch();
+        GameAudio[position].PlayStart();
+    }
+
+    private void AlterAudioPitch(int position, float change)
+    {
+        GameAudio[position].ChangePitch(change);
+        GameAudio[position].PlayStart();
     }
 
     private string DenyText(int changetext, TextMeshProUGUI displaytext)
@@ -342,4 +363,6 @@ public class BlackMarketUI : MonoBehaviour
 
         return displaytext.text;
     }
+
+    
 }

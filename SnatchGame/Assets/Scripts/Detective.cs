@@ -33,6 +33,7 @@ public class Detective : Entity, IDetectionCount
     private bool DoubleIncreasePoints;
  
     private GameObject Player;
+    private Vector3 PlayerLocation;
 
     [SerializeField]
     private float StalkingSpeed;
@@ -59,12 +60,16 @@ public class Detective : Entity, IDetectionCount
 
     private Rigidbody rig;
 
-    public Audio GameAudio;
+    public Audio[] GameAudio;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameAudio = GameObject.Find("Detection").GetComponent<Audio>();
+        GameAudio = new Audio[3];
+
+        GameAudio[0] = GameObject.Find("Detection").GetComponent<Audio>();
+        GameAudio[1] = GameObject.Find("Bump").GetComponent<Audio>();
+        GameAudio[2] = GameObject.Find("DetectiveFollowPlayer").GetComponent<Audio>();
 
         FollowPlayer = false;
         LostPlayer = false; 
@@ -104,11 +109,19 @@ public class Detective : Entity, IDetectionCount
             StartCoroutine(Timer());
             if (FollowPlayer && !LostPlayer)
             {
-                this.transform.LookAt(Player.transform);
-
+                //Help with looking at one axis from https://stackoverflow.com/questions/72086105/how-do-i-make-an-enemy-look-at-a-player-only-on-the-x-axis-in-unity
+                var p = Player.transform.position;
+                p.y = transform.position.y;
+                this.transform.LookAt(p);
                 this.transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed * Time.deltaTime);
 
                 FollowPlayerTimer();
+
+                if (!GameAudio[2].audioName.isPlaying && !LostPlayer)
+                {
+                    playerUI.GameAudio[0].StopAudio();
+                    GameAudio[2].PlayAudio();
+                }
             }
         }
 
@@ -122,6 +135,7 @@ public class Detective : Entity, IDetectionCount
     {
         if(collision.gameObject.CompareTag("Player"))
         {
+            GameAudio[1].PlayStart();
             DetectionActive(1);
         }
 
@@ -131,7 +145,11 @@ public class Detective : Entity, IDetectionCount
     private void DetectionActive(float num)
     {
         rend.material = npcColorDetection;
-        FallAction();
+        if(!FollowPlayer) //If the detective is not following the player
+        {
+            FallAction();
+        }
+       
         StartCoroutine(DetectionIncrease(num));
     }
 
@@ -166,9 +184,9 @@ public class Detective : Entity, IDetectionCount
     public IEnumerator DetectionIncrease(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if (!GameAudio.audioName.isPlaying)
+        if (!GameAudio[0].audioName.isPlaying)
         {
-            GameAudio.PlayStart();
+            GameAudio[0].PlayStart();
         }
         playerUI.DetectionAmount++;
 
@@ -184,7 +202,14 @@ public class Detective : Entity, IDetectionCount
         }
         else
         {
+            if (!playerUI.GameAudio[0].audioName.isPlaying)
+            {
+                GameAudio[2].StopAudio();
+                playerUI.GameAudio[0].PlayAudio();
+                
+            }
             LostPlayer = true;
+            
         }
     }
 

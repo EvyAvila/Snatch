@@ -42,6 +42,16 @@ public class Audio : MonoBehaviour
         this.audioName.PlayOneShot(this.audioName.clip);
     }
 
+    public void ChangePitch(float pitchChange) 
+    {
+        this.audioName.pitch = pitchChange;
+    }
+
+    public void NormalPitch()
+    {
+        this.audioName.pitch = 1;
+    }
+
 }
 
 
