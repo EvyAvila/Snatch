@@ -13,12 +13,12 @@ public class PlayerHand : Player
     private ArmState arm;
     private InputAction handAction;
 
-    private Material handColorNormal;
+    //private Material handColorNormal;
 
-    [SerializeField]
-    private Material handColorActive;
+    //[SerializeField]
+    //private Material handColorActive;
 
-    private MeshRenderer render;
+    //private MeshRenderer render;
 
     private PlayerController player;
 
@@ -56,8 +56,8 @@ public class PlayerHand : Player
 
     void Start()
     {
-        handColorNormal = GetComponent<Renderer>().material;
-        render = GetComponent<MeshRenderer>();
+        //handColorNormal = GetComponent<Renderer>().material;
+        //render = GetComponent<MeshRenderer>();
 
         if(player == null)
         {
@@ -71,9 +71,10 @@ public class PlayerHand : Player
     
     void FixedUpdate()
     {
-        HandActivation();
+        //HandActivation();
     }
 
+    /*
     private void HandActivation()
     {
         if(handAction.IsPressed())
@@ -84,17 +85,12 @@ public class PlayerHand : Player
         {
             render.material = handColorNormal;
         }
-    }
+    }*/
 
-    //Do I still need this part, or keep stay?
     private void OnTriggerEnter(Collider other)
     {
-        //var value = handAction.ReadValue<float>();
-
         if (other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
-            //Debug.Log(arm.ToString() + " hand is grabbing the item");
-            
             AddToInventory(other);
         }
     }
@@ -103,12 +99,10 @@ public class PlayerHand : Player
     {
         if(other.gameObject.CompareTag("Item") && handAction.IsPressed())
         {
-            //Debug.Log(arm.ToString() + " hand is grabbing the item");
             AddToInventory(other);
         }
     }
 
-    //Double check this can work
     private void AddToInventory(Collider other)
     {
         GameObject stolenItem = other.GameObject();

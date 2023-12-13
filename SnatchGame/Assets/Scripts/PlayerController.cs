@@ -13,7 +13,7 @@ public class PlayerController : Player
     public int StolenItemsTotal { get; set; }
     public int GetTotal { get; set; }
 
-    //public Animator PlayerAnimation;
+    public Animator animator;
 
     [SerializeField]
     private int speed;
@@ -76,7 +76,7 @@ public class PlayerController : Player
         FindTotal();
         PenaltyActive= false;
 
-        DetectionMeterCount = 0;
+        
         TouchGround = false;
 
         //Physics.gravity = new Vector3(0, -7, 0);
@@ -92,7 +92,8 @@ public class PlayerController : Player
         reductionSpeedTime = 5;
         reductionSpeedDefault = reductionSpeedTime;
 
-        //PlayerAnimation = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        DetectionMeterCount = 0;
     }
 
     void FixedUpdate()
@@ -127,7 +128,7 @@ public class PlayerController : Player
     {
 
         var value = moveAction.ReadValue<Vector3>();
-        Direction.z = value.y; //I don't know why it won't take z
+        Direction.z = -value.y; 
 
         transform.Rotate(0, -value.x * RotateSpeed * Time.deltaTime, 0);
 
@@ -136,6 +137,8 @@ public class PlayerController : Player
             this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero; 
         }
 
+        animator.SetFloat("Speed", Direction.z);
+        
         transform.Translate(Direction * Speed * Time.deltaTime);
 
         MoveBackDetection();
@@ -154,18 +157,18 @@ public class PlayerController : Player
 
     public void MoveBackDetection()
     {
-        //Z = 1 for moving backwards
+        //Z = -1 for moving backwards
         switch (PenaltyActive)
         {
             case true:
                 //Debug.Log("Punished");
-                if(CooldownTimer > 0 && Direction.z != 1)
+                if(CooldownTimer > 0 && Direction.z != -1)
                 {
                    // Debug.Log("cooldown in progress");
                     CooldownTimer -= Time.deltaTime;
                     DetectionMeterCount -= Time.deltaTime;
                 }
-                else if(CooldownTimer > 0 && Direction.z > 0 || Direction.z == 1)
+                else if(CooldownTimer > 0 && Direction.z < 0 || Direction.z == -1)
                 {
                     //Debug.Log("Reset cooldown");
                     CooldownTimer = CooldownDefault;
@@ -181,7 +184,7 @@ public class PlayerController : Player
                 }
                 break;
             case false:
-                if (Direction.z > 0 && timeRemaining > 0) //Count down timer if using backwards
+                if (Direction.z < 0 && timeRemaining > 0) //Count down timer if using backwards
                 {
                     timeRemaining -= Time.deltaTime;
                     DetectionMeterCount += Time.deltaTime;
@@ -233,7 +236,7 @@ public class PlayerController : Player
     private void FallAction()
     {
         Fall = true;
-
+        animator.SetBool("Fall", Fall);
         rig.freezeRotation = false; //Based from https://discussions.unity.com/t/how-do-i-unfreeze-z-rotation-in-a-script-and-then-freeze-it-again/194326
         this.transform.position += Vector3.up * 15 * Time.deltaTime;
         this.transform.Rotate(0,0, -180 * 4 * Time.deltaTime);
@@ -249,6 +252,7 @@ public class PlayerController : Player
         {
             this.transform.rotation = new Quaternion(0, 0, 0, 0);
             Fall = false;
+            animator.SetBool("Fall", Fall);
             fallRemaining = fallDefault;
            
             rig.freezeRotation = true;
@@ -261,14 +265,14 @@ public class PlayerController : Player
     {
         if (reductionSpeedTime > 0)
         {
-            Debug.Log("Speed Cooldown");
+            //Debug.Log("Speed Cooldown");
             reductionSpeedTime -= Time.deltaTime;
         }
         else
         {
             Speed = speed;
             reductionSpeedTime = reductionSpeedDefault;
-            Debug.Log("Player speed back to normal");
+            //Debug.Log("Player speed back to normal");
         }
     }
 

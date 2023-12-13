@@ -81,7 +81,8 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
 
         DetectionText.transform.Find("DetectionBar").GetComponent<Slider>().maxValue = DetectionMax;
         InventoryText.transform.Find("InventoryBar").GetComponent<Slider>().maxValue = player.StolenItemsTotal;
-        PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().value = 0;
+
+        PenaltyText.transform.Find("PenaltyMeter").GetComponent<Slider>().maxValue = DetectionMaxValue;
         
         detective = GameObject.Find("Detective").GetComponent<Detective>();
 

@@ -84,8 +84,18 @@ public class PlayerArm : Player
         var value = armAction.ReadValue<Vector3>();
 
         //Debug.Log(value);
-        Direction.z = -value.y; //forward and back
-        Direction.x = value.x; //left and right
+        switch (arm)
+        {
+            case ArmState.Left:
+                Direction.z = value.y; //forward and back
+                Direction.x = value.x; //left and right
+                break;
+            case ArmState.Right:
+
+                Direction.z = -value.y; //forward and back
+                Direction.x = -value.x; //left and right
+                break;
+        }
 
         if (Direction.x != 0 || Direction.z != 0)
         {
