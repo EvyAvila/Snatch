@@ -74,7 +74,7 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
 
         playerState = PlayerState.Active;
 
-        DetectionMaxValue = player.timeRemaining;
+        DetectionMaxValue = 5;//player.timeRemaining;
         CooldownMaxValue = player.CooldownTimer;
 
         PlayerAttention = false;
