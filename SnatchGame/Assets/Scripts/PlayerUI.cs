@@ -31,7 +31,7 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
     private float DetectionMaxValue;
     private float CooldownMaxValue;
     
-    private int DetectionMax;
+    public int DetectionMax { get; set; }
 
     private PlayerController player;
 
@@ -75,7 +75,7 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
         playerState = PlayerState.Active;
 
         DetectionMaxValue = 5;//player.timeRemaining;
-        CooldownMaxValue = player.CooldownTimer;
+        CooldownMaxValue = 10;//player.CooldownTimer;
 
         PlayerAttention = false;
 
@@ -248,7 +248,15 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
         {
             GameAudio[3].PlayAudio();
         }
-        DetectionAmount += 2;
+
+        if (DetectionAmount + 2 < DetectionMax)
+        {
+            DetectionAmount += 2;
+        }
+        else
+        {
+            DetectionAmount += DetectionMax - DetectionAmount;
+        }
 
         StopAllCoroutines();
     }

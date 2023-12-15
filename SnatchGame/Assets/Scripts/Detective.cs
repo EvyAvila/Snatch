@@ -184,8 +184,18 @@ public class Detective : Entity, IDetectionCount
         yield return new WaitForSeconds(2);
         if (DoubleIncreasePoints && !FollowPlayer)
         {
-            playerUI.DetectionAmount += 2;
+            if (playerUI.DetectionAmount + 2 < playerUI.DetectionMax)
+            {
+                playerUI.DetectionAmount += 2;
+            }
+            else
+            {
+                playerUI.DetectionAmount += playerUI.DetectionMax - playerUI.DetectionAmount;
+            }
         }
+
+        
+
         FollowPlayer = true;
 
         StopAllCoroutines();

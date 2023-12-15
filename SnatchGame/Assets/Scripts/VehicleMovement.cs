@@ -87,7 +87,16 @@ public class VehicleMovement : MonoBehaviour, IDetectionCount
         {
             GameAudio[0].PlayStart();
         }
-        playerUI.DetectionAmount += 4;
+
+        if(playerUI.DetectionAmount + 4 < playerUI.DetectionMax)
+        {
+            playerUI.DetectionAmount += 4;
+        }
+        else
+        {
+            playerUI.DetectionAmount += playerUI.DetectionMax - playerUI.DetectionAmount;
+        }
+       
               
         StopAllCoroutines();
     }
