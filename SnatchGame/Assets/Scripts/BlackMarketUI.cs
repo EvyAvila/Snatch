@@ -285,7 +285,7 @@ public class BlackMarketUI : MonoBehaviour
         }
         else if(item.CompareTag("Jacket"))
         {
-            player.StolenItemsTotal = player.GetTotal; 
+            player.StolenItemsTotal = player.GetTotal - 2; //Just in case the animals take the two items
         }
         else if(item.CompareTag("Gloves"))
         {

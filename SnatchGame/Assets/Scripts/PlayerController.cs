@@ -104,8 +104,6 @@ public class PlayerController : Player
            
             //this.transform.position += Vector3.down * 2 * Time.deltaTime;
         }*/
-        //PlayerAnimation.SetFloat("Speed", Speed);
-        //PlayerAnimation.SetBool("Fallen", Fall);
 
         if (Fall)
         {
@@ -113,13 +111,17 @@ public class PlayerController : Player
         }
         else if(playerUI.playerState == PlayerState.Active && !Fall)
         {
-            
             MovePlayer();
         }
 
         if(Speed != speed)
         {
             ResetSpeed();
+        }
+
+        if(playerUI.playerState == PlayerState.Win)
+        {
+            animator.SetFloat("Speed", 0);
         }
 
     }

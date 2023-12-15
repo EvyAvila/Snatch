@@ -9,6 +9,7 @@ public class Menu : MonoBehaviour
     [SerializeField]
     private Button StartButton;
 
+    public Audio GameAudio;
 
     private void OnEnable()
     {
@@ -24,6 +25,14 @@ public class Menu : MonoBehaviour
     void Start()
     {
         StartButton.onClick.AddListener(BeginGame);
+
+
+        if(GameAudio == null)
+        {
+            GameAudio = GameObject.Find("MainMenu").GetComponent<Audio>();
+        }
+
+        GameAudio.PlayAudio();
     }
 
     // Update is called once per frame

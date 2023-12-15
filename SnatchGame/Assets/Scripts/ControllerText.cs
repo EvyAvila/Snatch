@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ControllerText : MonoBehaviour
 {
-    [SerializeField]
-    private TextMesh[] ControllerTextObj;
+    //[SerializeField]
+    //private TextMesh[] ControllerTextObj;
 
     [SerializeField]
     private int WaitTime;
@@ -24,7 +24,7 @@ public class ControllerText : MonoBehaviour
     void Start()
     {
         //ControllerTextObj = GetComponent<TextMesh[]>();
-        DisplayText(0);
+        //DisplayText(0);
         StartCoroutine(Timer());
         PlayerHasTeleported = false;
     }
@@ -43,7 +43,7 @@ public class ControllerText : MonoBehaviour
     IEnumerator Timer()
     {
         yield return new WaitForSeconds(WaitTime);
-        DisplayText(255);
+        //DisplayText(255);
         StopAllCoroutines();
     }
 
@@ -58,19 +58,12 @@ public class ControllerText : MonoBehaviour
     }
 
 
-    private void DisplayText(int num)
-    {
-        foreach(var v in ControllerTextObj)
-        {
-            v.color = new Color(219, 219, 156, num);
-        }
-    }
-
+    
     private void OnTriggerExit(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            DisplayText(0);
+            //DisplayText(0);
             
         }
     }

@@ -182,6 +182,10 @@ public class PlayerUI : MonoBehaviour, IDetectionCount
         {
             DetectiveFollowText.text = "";
         }
+        else
+        {
+            DetectiveFollowText.text = "";
+        }
     }
 
     private string EndingString(string condition)

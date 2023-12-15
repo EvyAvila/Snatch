@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
         ResetGame(Detective);
         
         Detective.transform.localPosition = Detective.GetComponent<Detective>().detectivePosition.localPosition;
-
+        Detective.GetComponent<Detective>().ResetDetective();
     }
 
     private void ResetGame(GameObject obj)

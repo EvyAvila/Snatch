@@ -33,7 +33,7 @@ public class Detective : Entity, IDetectionCount
     private bool DoubleIncreasePoints;
  
     private GameObject Player;
-    private Vector3 PlayerLocation;
+    //private Vector3 PlayerLocation;
 
     [SerializeField]
     private float StalkingSpeed;
@@ -62,6 +62,8 @@ public class Detective : Entity, IDetectionCount
 
     public Audio[] GameAudio;
 
+    private Animator DetectiveAnimation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,7 +85,7 @@ public class Detective : Entity, IDetectionCount
             playerUI = Player.GetComponent<PlayerUI>();
         }
 
-        Speed = StalkingSpeed;
+        Speed = 0;
 
         Item = transform.Find("Object").gameObject; //Based from https://stackoverflow.com/questions/25763587/how-can-i-find-child-gameobject
 
@@ -98,22 +100,30 @@ public class Detective : Entity, IDetectionCount
         rig = GetComponent<Rigidbody>();
         rig.freezeRotation = true;
 
+        DetectiveAnimation = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(!Item.activeInHierarchy)
+        DetectiveAnimation.SetFloat("Speed", Speed);
+        DetectiveAnimation.SetBool("Fall", Fall);
+
+        if (!Item.activeInHierarchy)
         {
             DoubleIncreasePoints = true;
             StartCoroutine(Timer());
             if (FollowPlayer && !LostPlayer)
             {
+                Speed = StalkingSpeed;
+
                 //Help with looking at one axis from https://stackoverflow.com/questions/72086105/how-do-i-make-an-enemy-look-at-a-player-only-on-the-x-axis-in-unity
                 var p = Player.transform.position;
                 p.y = transform.position.y;
                 this.transform.LookAt(p);
                 this.transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed * Time.deltaTime);
+
+                
 
                 FollowPlayerTimer();
 
@@ -209,7 +219,7 @@ public class Detective : Entity, IDetectionCount
                 
             }
             LostPlayer = true;
-            
+            Speed = 0;
         }
     }
 
@@ -237,5 +247,15 @@ public class Detective : Entity, IDetectionCount
             rig.freezeRotation = true;
         }
     }
-   
+    
+    public void ResetDetective()
+    {
+        FollowPlayer = false;
+        LostPlayer = false;
+        DoubleIncreasePoints = false;
+        timeRemaining = 60;
+        timeRemain = 5;
+        Fall = false;
+        Speed = 0;
+    }    
 }
